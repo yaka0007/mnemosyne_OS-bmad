@@ -1,7 +1,7 @@
 {
   "name": "@mnemosyne-plugins/bmad-2",
   "displayName": "BMAD 2.0",
-  "version": "0.900.0",
+  "version": "1.0.0",
   "description": "Brief - Mapping - Architecture - Delivery. Complete multi-step wizard for project design and validation.",
   "permissions": [
     "vault:read",
