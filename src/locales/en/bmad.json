@@ -1,0 +1,612 @@
+{
+  "title": "BMAD COPILOT",
+  "subtitle": "BMAD wizard to create a structured and operational project",
+  "flowTitle": "BMAD Flow",
+  "completion": "Completion score",
+  "steps": {
+    "brief": {
+      "title": "Brief",
+      "helper": "Define the problem, objectives and context."
+    },
+    "mapping": {
+      "title": "Mapping",
+      "helper": "List actors, resources, risks and dependencies."
+    },
+    "architecture": {
+      "title": "Architecture",
+      "helper": "Choose technical structure and trade-offs."
+    },
+    "delivery": {
+      "title": "Delivery",
+      "helper": "Plan execution, milestones and validation criteria."
+    }
+  },
+  "suggestions": {
+    "title": "Contextual suggestions",
+    "brief": {
+      "0": "Clarify the primary goal in one measurable sentence.",
+      "1": "List non-negotiable constraints explicitly.",
+      "2": "Identify the main decision maker and stakeholders."
+    },
+    "mapping": {
+      "0": "Map critical dependencies and associated risks.",
+      "1": "Link each actor to concrete responsibilities.",
+      "2": "Add assumptions to validate early."
+    },
+    "architecture": {
+      "0": "Define interfaces and contracts between components.",
+      "1": "Document trade-offs on cost, timeline, complexity.",
+      "2": "Validate failure points and mitigation plans."
+    },
+    "delivery": {
+      "0": "Frame milestones with clear Definition of Done.",
+      "1": "Prioritize deliverables by impact and risk.",
+      "2": "Attach success metrics to each milestone."
+    },
+    "softExtra": "Pro suggestion: schedule a weekly BMAD risk review.",
+    "strongExtra": "Pro+ suggestion: prepare a What-If scenario for the most critical decision."
+  },
+  "form": {
+    "projectName": "Project name",
+    "projectNamePlaceholder": "Ex: Mnemosyne BMAD Workspace",
+    "reloadTitle": "Reload an existing BMAD project",
+    "reloadSubtitle": "Select an existing project to restore the wizard.",
+    "reloadAction": "Reload",
+    "refreshProjects": "Refresh",
+    "noProjects": "No project available.",
+    "projectDescription": "Short description",
+    "projectDescriptionPlaceholder": "Project summary for registry",
+    "brief": "BMAD Brief",
+    "briefPlaceholder": "Problem, main objective, constraints, target...",
+    "mapping": "BMAD Mapping",
+    "mappingPlaceholder": "Actors, flows, risks, dependencies, assumptions...",
+    "architecture": "BMAD Architecture",
+    "architecturePlaceholder": "Components, technical choices, interfaces, contracts...",
+    "delivery": "Delivery plan",
+    "deliveryPlaceholder": "Milestones, definition of done, timeline, risks...",
+    "freeNotesBriefPlaceholder": "Additional context, prior decisions, non-negotiable constraints, useful references...",
+    "freeNotesMappingPlaceholder": "Business trade-offs, implicit dependencies, assumptions to validate, coordination points...",
+    "freeNotesArchitecturePlaceholder": "Technical constraints, accepted debt, architecture decisions, discarded alternatives...",
+    "freeNotesDeliveryPlaceholder": "Mitigation plan, launch prerequisites, execution details, quality checks...",
+    "hashtags": "Resonance hashtags",
+    "hashtagsPlaceholder": "Ex: bmad, roadmap, architecture, delivery",
+    "userMode": "User mode",
+    "telemetryMode": "BMAD telemetry",
+    "proactiveMode": "Proactive mode"
+  },
+  "options": {
+    "userMode": {
+      "normal": "Normal (manual first)",
+      "pro": "Pro (manual + proactive mix)"
+    },
+    "telemetry": {
+      "local_only": "Local only",
+      "opt_in_remote": "Remote opt-in",
+      "full_remote": "Remote enabled by default"
+    },
+    "proactive": {
+      "manual_only": "Manual only",
+      "soft_proactive": "Soft proactive",
+      "strong_proactive": "Strong proactive"
+    }
+  },
+  "ui": {
+    "controlsHint": "User mode = guidance depth | Telemetry = data sharing level | Proactive mode = automatic suggestion intensity.",
+    "help": {
+      "userMode": {
+        "title": "User mode",
+        "description": "Sets the guidance style. Normal keeps control manual; Pro enables more initiative and recommendations."
+      },
+      "telemetryMode": {
+        "title": "BMAD telemetry",
+        "description": "Defines where usage signals are kept: local only, or remote sharing based on your choice."
+      },
+      "proactiveMode": {
+        "title": "Proactive mode",
+        "description": "Controls how often auto-suggestions appear: manual only, soft proactive, or strong proactive."
+      }
+    }
+  },
+  "infoPage": {
+    "title": "What is BMAD?",
+    "openAria": "Learn more about the BMAD method",
+    "whatIsTitle": "The BMAD method",
+    "whatIs": "BMAD (Brief, Mapping, Architecture, Delivery) is a project framing method that structures your thinking in four phases: define the problem and objectives (Brief), map actors and risks (Mapping), choose architecture and trade-offs (Architecture), plan execution and milestones (Delivery). It avoids fuzzy projects and late feedback.",
+    "benefitsTitle": "Benefits",
+    "benefitsIntro": "BMAD helps you to:",
+    "benefit1": "Clarify the problem and objectives before coding",
+    "benefit2": "Identify risks and dependencies from the start",
+    "benefit3": "Document technical choices and trade-offs",
+    "benefit4": "Plan measurable deliverables with Definition of Done",
+    "resonanceTitle": "BMAD + Mnemosyne Resonance",
+    "resonance": "The BMAD wizard integrates with the Mnemosyne ecosystem: your projects are indexed by Resonance, hashtags link docs to memories, and the Brain can leverage this structured context for more relevant answers. It's framing that feeds your digital memory.",
+    "whyAdvantageTitle": "Why work this way?",
+    "whyAdvantage": "Combining BMAD and Mnemosyne gives you an edge: you structure before acting, you document while creating, and your knowledge base stays aligned with your projects. Less documentation debt, more coherence between intention and execution."
+  },
+  "actions": {
+    "previous": "Previous",
+    "next": "Next",
+    "createProject": "Create BMAD project",
+    "creating": "Creating...",
+    "cleanRegistry": "Clean up"
+  },
+  "confirm": {
+    "title": "Confirm creation",
+    "message": "Create BMAD project \"{{project}}\" with current settings?",
+    "cleanupOrphansTitle": "Resonance registry cleanup",
+    "cleanupOrphansMessage": "{{count}} BMAD project(s) seem deleted from disk ({{projects}}). Do you want to clean these entries from the Resonance registry?"
+  },
+  "success": {
+    "createdTitle": "BMAD project created",
+    "createdMessage": "Project \"{{project}}\" is ready.",
+    "locationTitle": "Where is my project?",
+    "locationMessage": "Project location: {{path}}",
+    "docsGeneratedTitle": "BMAD docs generated",
+    "docsGeneratedMessage": "{{count}} BMAD documents were generated in /docs.",
+    "docsGeneratedPartialMessage": "Project created, but BMAD docs generation returned: {{details}}.",
+    "docsGenerationSkipped": "Project created. BMAD docs generation was skipped (project:write-files handler unavailable in this session).",
+    "reloadedTitle": "BMAD project reloaded",
+    "reloadedMessage": "BMAD project \"{{project}}\" reloaded.",
+    "registryCleanedTitle": "BMAD registry cleaned",
+    "registryCleanedMessage": "{{count}} missing project(s) were removed from registry.",
+    "docsGeneratedSuccess": "BMAD documents generated successfully!",
+    "projectDeleted": "Project \"{{project}}\" deleted.",
+    "proposalApplied": "AI proposal applied!",
+    "reviewReady": "Critical review available!",
+    "correctionsApplied": "{{count}} correction(s) applied! Your documents have been updated.",
+    "projectSaved": "Project saved to vault!",
+    "reviewCopied": "Review copied!"
+  },
+  "doc": {
+    "project": "Project",
+    "generatedAt": "Generated at",
+    "tags": "Tags",
+    "packContent": "Pack content",
+    "executiveSummary": "Executive summary",
+    "objective": "Objective",
+    "problem": "Problem",
+    "scope": "Scope",
+    "actors": "Actors",
+    "resources": "Resources",
+    "risks": "Risks",
+    "structure": "Structure",
+    "techStack": "Tech stack",
+    "tradeoffs": "Trade-offs",
+    "milestones": "Milestones",
+    "validation": "Validation",
+    "kpis": "KPIs",
+    "notes": "Notes",
+    "toComplete": "To be completed",
+    "aiLanguage": "English",
+    "aiLanguagePrompt": "Language: English.",
+    "aiRespondIn": "Respond in English",
+    "empty": "(empty)"
+  },
+  "errors": {
+    "title": "BMAD error",
+    "missingRequired": "Project name and brief are required.",
+    "projectNameRequired": "Project name is required.",
+    "createFailed": "Unable to create BMAD project.",
+    "loadProjectFailed": "Unable to reload this BMAD project.",
+    "noBmadData": "This project has no reloadable BMAD data.",
+    "unexpected": "An unexpected error occurred.",
+    "exportFailed": "Export error: {{error}}",
+    "openFolderFailed": "Unable to open folder",
+    "generic": "Error: {{error}}",
+    "deleteFailed": "Error during deletion: {{error}}",
+    "inferenceFailed": "Inference error",
+    "assistantCallFailed": "An error occurred while calling the assistant. Please check your API key settings.",
+    "nameProjectFirst": "Please name your project in Step 1 first so the AI can assist you!",
+    "enrichFailed": "Enrichment error: {{error}}",
+    "reviewFailed": "Review error: {{error}}",
+    "noSuggestionSelected": "No suggestion selected!",
+    "nameRequiredToSave": "A project name is required to save!",
+    "writeFailed": "Write error: {{error}}",
+    "noProjectsFound": "No saved projects found in this vault.",
+    "noOtherBmadProjects": "No other BMAD projects found",
+    "noResponseGenerated": "Sorry, no response was generated.",
+    "saveConfigFailed": "Unable to save project configuration.",
+    "mkdirFailed": "Unable to create export folder.",
+    "writeDocFailed": "Unable to write file {{file}}"
+  },
+  "validation": {
+    "projectName": "project name",
+    "brief": "BMAD brief",
+    "missingPrefix": "Missing fields:",
+    "inlineMessage": "Creation is blocked until these fields are filled: {{fields}}."
+  },
+  "review": {
+    "description": "Run a critical review before creating so the AI can enrich the documents with its recommendations."
+  },
+  "ai": {
+    "title": "BMAD assistant",
+    "reviewTitle": "Critical review",
+    "reviewButton": "Critical review",
+    "reviewPanelTitle": "Detailed critical review",
+    "reviewReady": "Critical review is ready in the panel below.",
+    "reviewEmpty": "No review available.",
+    "copyReview": "Copy review",
+    "insertReview": "Insert into step",
+    "copySuccess": "Review copied to clipboard.",
+    "insertSuccess": "Review inserted into current step.",
+    "insertSuccessWithStep": "Review inserted into Free notes ({{step}}).",
+    "reviewInsertLabel": "AI critical review",
+    "copyUnavailable": "Clipboard is not available.",
+    "annotationPlaceholder": "Add your annotation/correction for this point...",
+    "annotationApply": "Apply annotation",
+    "annotationApplied": "Annotation added to current step.",
+    "annotationLabel": "User annotation (disagreement / correction)",
+    "annotationSource": "Reviewed point",
+    "annotationUserFix": "User correction",
+    "noSuggestionParsed": "Unable to parse usable AI suggestions.",
+    "questionAssistReady": "AI suggestions generated for this question.",
+    "assistFallbackUsed": "AI assistant unavailable, local suggestions were provided (check API keys in Settings > API Keys).",
+    "assistQuestion": "Assist",
+    "addSelectedSuggestions": "Add selection",
+    "selectAtLeastOneSuggestion": "Select at least one suggestion.",
+    "suggestionsAdded": "Suggestions added with line breaks.",
+    "rephraseAction": "Rephrase",
+    "rephraseNeedContent": "Add content first to rephrase.",
+    "rephraseDoneDescription": "Project summary rephrased.",
+    "rephraseDoneNotes": "Notes rephrased for this step.",
+    "rephraseFallbackUsed": "AI unavailable, local rephrasing applied.",
+    "notesAssistAction": "Assist",
+    "notesAssistNeedAnswers": "Fill at least one guided answer first to generate notes.",
+    "notesAssistDone": "Complete notes suggestion added.",
+    "notesAssistLabel": "AI proposal (complete notes)",
+    "notesAssistLocalHeader": "Quick summary of the active phase",
+    "notesAssistFallbackUsed": "AI assistant unavailable, a local notes summary was added.",
+    "hashtagsAssistAction": "Assist",
+    "hashtagsAssistDone": "Suggested hashtags added.",
+    "hashtagsAssistFallbackUsed": "AI assistant unavailable, local hashtags were added.",
+    "hashtagsAssistNeedContext": "Add project context first to suggest hashtags.",
+    "pricingFree": "Free",
+    "pricingPerMillion": "In {{input}} / Out {{output}} / 1M tok",
+    "configureModels": "AI models",
+    "modelUsageHint": "Assistant = Assist/Rephrase | Reviewer = Critical review",
+    "assistantModel": "Assistant model",
+    "reviewerModel": "Reviewer model",
+    "assistAction": "Assist this step",
+    "reviewAction": "Critical review",
+    "reviewLoadingAction": "Review in progress…",
+    "reviewLoading": "Running critical review across the full BMAD set…",
+    "reviewLoadingHint": "Brief, Mapping, Architecture and Delivery are sent to the reviewer model. This may take a while.",
+    "reviewProcessHelpTitle": "How does critical review work?",
+    "reviewProcessHelpBody": "Critical review analyzes the full BMAD set (Brief, Mapping, Architecture, Delivery), then highlights inconsistencies, blind spots, and corrective actions. Use annotations to accept, adjust, or challenge each point before inserting it.",
+    "assistDone": "AI suggestion appended to the current step.",
+    "assistantAppendLabel": "AI contribution",
+    "assistObjective": "You are a BMAD copilot. Improve the active phase with concrete, actionable guidance.",
+    "reviewObjective": "You are a strict BMAD reviewer. Return only inconsistencies, blind spots, and top corrective actions.",
+    "generatingFromContext": "Generating AI proposal from context...",
+    "generatingSuggestions": "Generating AI suggestions...",
+    "writerSystemPrompt": "You are an experienced technical writer. Your goal is to take a project document plan and enrich it to make it clean, complete, structured, and ready for archiving. Write in {{language}} in standard Markdown format. Keep the user's information intact but improve style and clarity.",
+    "writerPrompt": "Enrich the following Markdown document with list structures and clear rephrasings:\n\n{{content}}",
+    "reviewerSystemPrompt": "You are a demanding and experienced BMAD project reviewer. Analyze the provided BMAD project and write a critical review in Markdown format.\n\nAt the very end of your response, after your general review, you must suggest targeted corrections for fields that need improvement under the following strict text format:\n\n=== SUGGESTIONS ===\n\n[SUGGESTION]\nCIBLE: phase.champ (Exact technical name of the field among: brief.objective, brief.problem, brief.scope, brief.notes, mapping.actors, mapping.resources, mapping.risks, mapping.notes, architecture.structure, architecture.techStack, architecture.tradeoffs, architecture.notes, delivery.milestones, delivery.validation, delivery.kpis, delivery.notes)\nLABEL: Readable name of the field (e.g. Brief > Main Goal)\nCRITIQUE: Brief explanation of the issue or improvement needed.\nCORRECTION: The complete and rewritten text proposed to replace the current content of this field.\n\n[SUGGESTION]\n... (repeat for each suggestion)\n\nWrite in {{language}}. Be direct, constructive and pragmatic.",
+    "reviewerPromptInput": "Here is the complete structure of my BMAD project:\n\n{{compiled}}\n\nPerform a detailed critical analysis of it."
+  },
+  "draft": {
+    "savedTitle": "BMAD draft",
+    "savedMessage": "BMAD steps saved.",
+    "saveNow": "Save",
+    "reset": "Reset data",
+    "notSavedYet": "No manual local draft save yet (autosave is active).",
+    "lastSavedAt": "Last saved: {{date}}"
+  },
+  "preview": {
+    "title": "BMAD documents",
+    "createInfo": "On creation, documents will be enriched by AI. Run a critical review below so recommendations are integrated into the docs.",
+    "progressEnhancing": "AI document enrichment...",
+    "progressStarting": "Starting…",
+    "progressHint": "Each BMAD file is enriched by AI (one request per file, 7–8 documents — may take several minutes).",
+    "progressStep": "{{current}} / {{total}}",
+    "docTimeoutTitle": "BMAD document",
+    "docTimeout": "Timeout for \"{{file}}\" — base draft kept.",
+    "tabSource": "Source",
+    "tabMnemolens": "MnemoLens",
+    "viewModeLabel": "Document display mode",
+    "expandAria": "Expand preview",
+    "expandFooter": "Escape or click outside to close."
+  },
+  "postCreate": {
+    "bannerTitle": "BMAD documents",
+    "docsReady": "Markdown files in the project docs folder:",
+    "docsMaybeMissing": "Project docs folder path (verify write succeeded):",
+    "rootHint": "Project root: {{path}}",
+    "openMnemoVault": "Open in MnemoVault",
+    "openExplorer": "Open in file explorer",
+    "copyPath": "Copy path",
+    "pathCopied": "Path copied to clipboard.",
+    "copyFailed": "Could not copy.",
+    "openExplorerFailed": "Could not open folder.",
+    "vaultOutsideTitle": "Outside vault",
+    "vaultOutsideHint": "This project is outside the active MnemoVault ({{path}}). Use « Open in file explorer » or create projects under your Vault folder.",
+    "vaultNavigateFailed": "Could not open this folder in MnemoVault."
+  },
+  "bmad2": {
+    "headerTitle": "BMAD 2.0",
+    "headerSubtitle": "Scoping Methodology & Document Generation",
+    "status": {
+      "studyNotVerified": "BMAD (Under review - Unverified)...",
+      "writing": "Writing...",
+      "generatingDoc": "BMAD (Under review - Unverified) — Generating {{file}}...",
+      "memorySearch": "Memory search - BMAD (Under review / Unverified)...",
+      "thinking": "Thinking BMAD (Under review / Unverified)...",
+      "criticalReview": "Critical review BMAD (Under review / Unverified)...",
+      "usingDefaultHostModel": "Using default host model",
+      "suggestedAdjustment": "Suggested adjustment"
+    },
+    "actions": {
+      "chooseModel": "Choose model",
+      "aiProfile": "AI Profile (Soul)",
+      "contextualLink": "Contextual link with other projects",
+      "resizeChat": "Drag to resize, double-click to expand/collapse",
+      "cancel": "Cancel",
+      "next": "Next",
+      "back": "Back",
+      "startScoping": "Start Scoping",
+      "saveDraft": "Save Draft",
+      "continue": "Continue",
+      "continueToStep4": "Continue to Validation",
+      "choose": "📁 Choose",
+      "reset": "Reset",
+      "backToFields": "Back to fields",
+      "openInExplorer": "📁 Open in explorer",
+      "finish": "Finish",
+      "generateDocs": "🚀 Generate project documents"
+    },
+    "titles": {
+      "llmModel": "LLM Model",
+      "cognitiveProfile": "Cognitive Profile (Soul)",
+      "contextualResonance": "Contextual Resonance"
+    },
+    "landing": {
+      "welcome": "Welcome to BMAD 2.0",
+      "subtitle": "The intelligent copilot to structure, map, and deliver your projects with precision.",
+      "learnMore": "Learn more about the BMAD method",
+      "newProject": "New Project",
+      "newProjectDesc": "Start from scratch",
+      "loadProject": "Load Project",
+      "loadProjectDesc": "Resume an existing project to update or finalize it.",
+      "bmadProjects": "BMAD Projects",
+      "bmadProjectsDesc": "Select a BMAD project to reload",
+      "checkingBmad": "Checking BMAD projects...",
+      "noBmadProjects": "No BMAD projects found. Create a new project or finalize an existing one with BMAD.",
+      "whatIsBmad": "What is BMAD?",
+      "methodTitle": "The BMAD Method",
+      "methodDesc": "BMAD (Brief, Mapping, Architecture, Delivery) is a project scoping method that structures your thinking in four phases: define the problem and goals (Brief), map actors and risks (Mapping), choose the technical structure and trade-offs (Architecture), plan execution and milestones (Delivery). It avoids vague projects and late revisions.",
+      "benefitsTitle": "Benefits",
+      "benefitsIntro": "BMAD helps you to:",
+      "benefit1": "Clarify the problem and goals before coding",
+      "benefit2": "Identify risks and dependencies from the start",
+      "benefit3": "Document technical choices and trade-offs",
+      "benefit4": "Plan measurable deliverables with Definition of Done",
+      "resonanceTitle": "BMAD + Mnemosyne Resonance",
+      "resonance": "The BMAD wizard integrates with the Mnemosyne ecosystem: your projects are indexed by Resonance, hashtags link docs to memories, and the Brain can leverage this structured context for more relevant answers.",
+      "whyTitle": "Why work this way?",
+      "why": "Combining BMAD and Mnemosyne gives you an advantage: you structure before acting, you document while creating, and your knowledge base remains aligned with your projects.",
+      "projectsFound": "{{count}} project(s) found",
+      "selectProject": "Select a project",
+      "searchingProjects": "Searching for projects...",
+      "noDescription": "No description"
+    },
+    "step1": {
+      "title": "Project foundations",
+      "subtitle": "Initialize the identity information to reference this scoping.",
+      "projectName": "Project Name *",
+      "projectNamePlaceholder": "Project name (ex: Dashboard-V2)",
+      "description": "Short description",
+      "descriptionPlaceholder": "Concise description of goals and expectations...",
+      "category": "Project Category",
+      "tags": "Resonance Hashtags",
+      "tagsPlaceholder": "Add tags (ex: roadmap, api) + Enter",
+      "resonanceProject": "Resonance Project",
+      "resonanceNone": "None (independent project)",
+      "resonanceNew": "New",
+      "resonanceCreate": "Create a new resonance project",
+      "resonanceNamePlaceholder": "New resonance project name...",
+      "validate": "Validate",
+      "cancel": "Cancel",
+      "continueToStep2": "Continue to Step 2",
+      "resonanceCreated": "Project \"{{name}}\" created.",
+      "resonanceCreatedTitle": "Resonance project created",
+      "createError": "Unable to create project.",
+      "createErrorTitle": "Error"
+    },
+    "step2": {
+      "title": "AI & Behavior Configuration",
+      "subtitle": "Define how artificial intelligence will interact with the BMAD flow.",
+      "userMode": "User Mode",
+      "userModeAria": "Defines the AI assistance level",
+      "telemetry": "Telemetry & Sharing",
+      "telemetryAria": "Sharing usage data to improve the system",
+      "proactiveMode": "Assistant Proactivity",
+      "proactiveModeAria": "AI initiative level in suggesting actions",
+      "modeNovice": "Novice (Step-by-step guidance)",
+      "modePro": "Pro (Manual + proactive mix)",
+      "modeExpert": "Expert (Total control)",
+      "telemetryOptIn": "Remote opt-in (Recommended)",
+      "telemetryLocal": "Local only (Private)",
+      "telemetryDisabled": "Disabled",
+      "proactiveStrong": "Strong proactive (Suggests often)",
+      "proactiveBalanced": "Balanced (Suggests sometimes)",
+      "proactiveReactive": "Reactive (Waits for your requests)",
+      "modelAssistant": "Assistant model",
+      "modelReviewer": "Reviewer model",
+      "modelsButton": "AI Models",
+      "back": "Back",
+      "continueToStep3": "Continue to Step 3",
+      "modalTitle": "LLM Models Selection",
+      "modalSubtitle": "Explicitly choose the Assistant model (assistance/rephrasing) and Reviewer model (critical review).",
+      "modalClose": "Close",
+      "modalHint": "Assistant = Assist/Rephrase | Reviewer = Critical review",
+      "tabAssistant": "Assistant model",
+      "tabReviewer": "Reviewer model",
+      "searchPlaceholder": "Search a model..."
+    },
+    "step3": {
+      "title": "BMAD Flow",
+      "subtitle": "Fill in the Brief, Mapping, Architecture and Delivery phases.",
+      "assist": "Assist",
+      "reformulate": "Rephrase",
+      "completionSolid": "Solid",
+      "completionProgress": "In progress",
+      "completionReinforce": "To reinforce",
+      "objective": "Main Goal",
+      "problem": "Problem to solve",
+      "scope": "Initial Scope (MVP)",
+      "actors": "Key Actors & Third-party Services",
+      "resources": "Available Resources & Allocation",
+      "risks": "Risks & Critical Dependencies",
+      "structure": "Global Structure",
+      "techStack": "Technical Stack",
+      "tradeoffs": "Arbitrations & Trade-offs",
+      "milestones": "Milestones & Timeline",
+      "validation": "Validation Criteria (Definition of Done)",
+      "kpis": "Key Success Indicators (KPIs)",
+      "notes": "Free notes ({{step}})",
+      "back": "Back",
+      "continueToStep4": "Continue to Step 4",
+      "finalize": "Finalize project",
+      "notesOptional": "Free notes (optional)",
+      "notesPlaceholder": "Additional constraints, discarded alternatives, links...",
+      "problemOpportunity": "Problem/opportunity",
+      "risksDependencies": "Risks & Dependencies",
+      "toolsTech": "Tools & Technologies",
+      "tradeoffsConstraints": "Arbitrations & Constraints",
+      "milestonesPlanning": "Milestones & Planning",
+      "validationDod": "Validation criteria (DoD)",
+      "kpisSuccess": "KPIs & Success measurement",
+      "completionScore": "Completion score",
+      "flowTitle": "BMAD Flow",
+      "contextProject": "Project",
+      "contextDescription": "Description",
+      "contextExisting": "Existing context",
+      "assistError": "Error during assistance.",
+      "reformulateError": "Error during rephrasing.",
+      "errorTitle": "Error",
+      "promptAssist": "You are a BMAD assistant. Propose a concise suggestion (2-4 sentences) for this field.\n\nField: {{field}}\nQuestion: {{question}}\n{{context}}\n\nReply ONLY with the text of the suggestion, without introduction or quotes.",
+      "promptRephrase": "Rephrase and improve this text to make it clearer and more structured. Keep the same meaning and information. Reply ONLY with the rephrased text, without introduction."
+    },
+    "chat": {
+      "welcomeMessage": "Hello! I am Mnemosyne. I can help you structure your project. What is it about?",
+      "bmadContext": "BMAD Context",
+      "placeholder": "Help me write my brief...",
+      "soulPersonality": "AI Profile (Soul)",
+      "noSoulLoaded": "No soul loaded",
+      "resonanceContext": "Resonance Context",
+      "noProject": "No project",
+      "vaultMemoryActive": "Global Memory Active (RAG)",
+      "vaultMemoryInactive": "Global Memory Disabled (Raw LLM)",
+      "souls": {
+        "default": "Mnemosyne AI Default",
+        "architect": "Software Architect",
+        "researcher": "Math/Logic Researcher",
+        "analyst": "Business Strategist"
+      },
+      "expandChat": "Expand chat",
+      "collapseChat": "Collapse chat",
+      "closeChat": "Close chat"
+    },
+    "step4": {
+      "title": "Save & File Generation",
+      "subtitle": "The compiled project will be stored in your active vault. You can run an AI critical review to validate technical blind spots.",
+      "documentsTitle": "BMAD Documents",
+      "createInfo": "Upon creation, documents will be enriched by AI. Launch a critical review below to integrate recommendations into the docs.",
+      "assistantTitle": "BMAD Assistant",
+      "reviewDescription": "Launch a critical review before creating so the AI can enrich documents with recommendations.",
+      "reviewAria": "The AI analyzes your project and provides constructive feedback",
+      "closeAria": "Close",
+      "copyTitle": "Copy",
+      "previous": "Previous",
+      "createProject": "Create BMAD Project",
+      "creating": "Creating...",
+      "runReview": "Run critical review",
+      "copyReview": "Copy review",
+      "suggestionsTitle": "🛠️ Suggested Operational Corrections",
+      "selectAll": "Select all",
+      "deselectAll": "Deselect all",
+      "applyCorrections": "Apply selected corrections and return to fields (Step 3)",
+      "exportFolderTarget": "Target export folder"
+    },
+    "confirm": {
+      "deleteProject": "Permanently delete the BMAD project \"{{project}}\"?"
+    },
+    "categories": {
+      "software": "Software",
+      "blockchain": "Blockchain",
+      "business": "Business",
+      "creative": "Creative",
+      "event": "Event",
+      "store": "Store",
+      "other": "Other"
+    },
+    "questions": {
+      "software": {
+        "brief": {
+          "objective": "What is the main objective of this application/software?",
+          "problem": "What user problem are you trying to solve?",
+          "scope": "What are the key features of the MVP?"
+        },
+        "mapping": {
+          "actors": "Who are the target users, administrators, and third-party APIs?",
+          "resources": "Dev team size, cloud budget, and allocated time?",
+          "risks": "What are the technical or security risks?"
+        },
+        "architecture": {
+          "structure": "Overall architecture (components, database, data flows)?",
+          "techStack": "Which languages, frameworks, and cloud services (AWS, Vercel...)?",
+          "tradeoffs": "Trade-offs: speed vs quality, cost vs performance..."
+        },
+        "delivery": {
+          "milestones": "Main milestones (Mockups, Alpha, Beta, V1)?",
+          "validation": "Acceptance criteria (Definition of Done)?",
+          "kpis": "Key indicators (load times, crashes, retention)?"
+        }
+      },
+      "blockchain": {
+        "brief": {
+          "objective": "What is the main Web3 / Blockchain concept?",
+          "problem": "What need for trust or decentralization are you addressing?",
+          "scope": "Which smart contracts need to be written for the MVP?"
+        },
+        "mapping": {
+          "actors": "Users, validators, nodes, and oracle partners?",
+          "resources": "Budget (gas fees, security audits) and dev team?",
+          "risks": "Smart contract vulnerabilities, regulatory risks?"
+        },
+        "architecture": {
+          "structure": "Architecture of on-chain smart contracts vs off-chain services?",
+          "techStack": "Target blockchain (Ethereum, Solana...), token standards?",
+          "tradeoffs": "Trade-offs of the blockchain trilemma (scalability, decentralization, security)?"
+        },
+        "delivery": {
+          "milestones": "Phases: Testnet deployment, Audits, Mainnet?",
+          "validation": "Audited security checks and launch criteria?",
+          "kpis": "Transactions per day, TVL, active addresses?"
+        }
+      },
+      "business": {
+        "brief": {
+          "objective": "What is the commercial objective or startup vision?",
+          "problem": "What problem or market gap in the target market are you addressing?",
+          "scope": "What initial products will you sell?"
+        },
+        "mapping": {
+          "actors": "Who are the target customers, competitors, and key suppliers?",
+          "resources": "Available capital, founding team, business network?",
+          "risks": "Financial, legal risks and barriers to entry?"
+        },
+        "architecture": {
+          "structure": "Business model (Business Model Canvas, subscriptions...)?",
+          "techStack": "Internal management tools (CRM, accounting, distribution channels)?",
+          "tradeoffs": "Rapid growth vs immediate profitability?"
+        },
+        "delivery": {
+          "milestones": "Major steps (legal incorporation, fundraising, commercialization)?",
+          "validation": "Validation criteria for Product-Market Fit?",
+          "kpis": "Revenue, CAC (customer acquisition cost), LTV (lifetime value)?"
+        }
+      }
+    }
+  }
+}
