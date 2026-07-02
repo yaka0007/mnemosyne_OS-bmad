@@ -436,7 +436,7 @@ Tu peux utiliser cette syntaxe autant de fois que nécessaire. L'application l'i
                   content: fileContent
                 });
                 if (writeRes.success) {
-                  showToast(`Fichier annexe "${filename}" créé dans le projet !`, 'success');
+                  showToast(t('bmad2.visuals.attachmentCreatedToast', { filename }), 'success');
                 } else {
                   console.error(`Failed to write file ${filename}:`, writeRes.error);
                 }
@@ -446,7 +446,7 @@ Tu peux utiliser cette syntaxe autant de fois que nécessaire. L'application l'i
             })();
             
             const rawTag = match[0];
-            cleanedReply = cleanedReply.replace(rawTag, `\n\n*📁 **Fichier annexe créé** : [${filename}](file:///${targetDir}/${filename})*\n\n`);
+            cleanedReply = cleanedReply.replace(rawTag, `\n\n*📁 **${t('bmad2.visuals.attachmentCreatedLabel')}** : [${filename}](file:///${targetDir}/${filename})*\n\n`);
           }
         }
 
@@ -882,16 +882,28 @@ Catégorie: ${projectCategory}
     }
   };
 
+  /** Locale-aware SVG diagram column headers/fallbacks — see svg-generator.ts. */
+  const svgDiagramLabels = {
+    actorsFallback: t('bmad2.diagramLabels.actorsFallback'),
+    structureFallback: t('bmad2.diagramLabels.structureFallback'),
+    techStackFallback: t('bmad2.diagramLabels.techStackFallback'),
+    milestonesFallback: t('bmad2.diagramLabels.milestonesFallback'),
+    colActors: t('bmad2.diagramLabels.colActors'),
+    colStructure: t('bmad2.diagramLabels.colStructure'),
+    colTechStack: t('bmad2.diagramLabels.colTechStack'),
+    colMilestones: t('bmad2.diagramLabels.colMilestones'),
+  };
+
   /** Deterministic SVG diagram rendering */
   const generateVisualDiagram = async () => {
     setIsGeneratingVisual('diagram');
     try {
-      const svg = generateSvgFromData(projectName, bmadData);
+      const svg = generateSvgFromData(projectName, bmadData, svgDiagramLabels);
       setGeneratedSvg(svg);
-      showToast("Diagramme d'architecture généré !", 'success');
+      showToast(t('bmad2.visuals.diagramGeneratedToast'), 'success');
       await handleSaveDraft(true, { generatedSvg: svg });
     } catch (e: any) {
-      showToast("Erreur lors de la génération du diagramme : " + (e.message || e), 'error');
+      showToast(t('bmad2.visuals.diagramGenErrorToast') + (e.message || e), 'error');
     } finally {
       setIsGeneratingVisual(null);
     }
@@ -920,10 +932,10 @@ Catégorie: ${projectCategory}
 
       const extracted = cleanCodeBlock(replyText, 'html');
       setGeneratedHtml(extracted);
-      showToast("Présentation interactive générée !", 'success');
+      showToast(t('bmad2.visuals.slidesGeneratedToast'), 'success');
       await handleSaveDraft(true, { generatedHtml: extracted });
     } catch (e: any) {
-      showToast("Erreur lors de la génération de la présentation : " + (e.message || e), 'error');
+      showToast(t('bmad2.visuals.slidesGenErrorToast') + (e.message || e), 'error');
     } finally {
       setIsGeneratingVisual(null);
     }
@@ -945,12 +957,12 @@ Catégorie: ${projectCategory}
       });
 
       if (!writeRes || writeRes.success === false) {
-        throw new Error(writeRes?.error || "Échec de l'écriture");
+        throw new Error(writeRes?.error || t('bmad2.visuals.writeFailedError'));
       }
-      showToast(`${filename} sauvegardé avec succès dans le projet !`, 'success');
+      showToast(t('bmad2.visuals.saveSuccessToast', { filename }), 'success');
       await handleSaveDraft(true);
     } catch (e: any) {
-      showToast("Erreur lors de la sauvegarde : " + (e.message || e), 'error');
+      showToast(t('bmad2.visuals.saveErrorToast') + (e.message || e), 'error');
     }
   };
 

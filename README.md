@@ -1,6 +1,6 @@
 # BMAD 2.0
 
-**A [Mnemosyne OS](https://github.com/yaka0007/Mnemosyne-Neural-OS) cartridge** — a guided, multi-step wizard that turns an idea into a structured project blueprint: **B**usiness · **M**apping · **A**rchitecture · **D**elivery.
+**A [Mnemosyne OS](https://github.com/yaka0007/Mnemosyne-Neural-OS) cartridge** — a guided, multi-step wizard that turns an idea into a structured project blueprint: **B**rief · **M**apping · **A**rchitecture · **D**elivery.
 
 It walks you through foundations, flow, architecture, and validation, then compiles your answers into a ready-to-use blueprint with generated documents and diagrams. Because it runs on the sovereign OS, it reads and writes your memory vaults and uses on-device inference — your project context stays yours.
 

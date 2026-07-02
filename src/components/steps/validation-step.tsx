@@ -379,10 +379,10 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
       <div className="glass-card" style={{ padding: '20px' }}>
         <h2 style={{ fontSize: '15px', fontWeight: 700, margin: '0 0 6px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Palette className="w-4 h-4 text-accent" />
-          <span>{t('bmad2.visuals.title', { defaultValue: "🎨 Visuels & Présentation (IA)" })}</span>
+          <span>{t('bmad2.visuals.title')}</span>
         </h2>
         <p style={{ color: 'var(--text-muted)', fontSize: '12.5px', margin: '0 0 16px 0', lineHeight: '1.4' }}>
-          {t('bmad2.visuals.subtitle', { defaultValue: "Générez des diagrammes d'architecture SVG ou des diaporamas interactifs HTML basés sur votre cadrage BMAD." })}
+          {t('bmad2.visuals.subtitle')}
         </p>
 
         {/* API Key compatibility detector warning */}
@@ -397,7 +397,7 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
             marginBottom: '16px',
             lineHeight: '1.4'
           }}>
-            <strong>⚠️ Clé API non compatible ou manquante :</strong> Le modèle système est configuré en mode 100% local ou n'a pas de clé API active. Pour de meilleurs résultats (diagrammes complexes ou slides d'élite), veuillez configurer <strong>Vertex AI</strong> ou renseigner vos clés API dans les <strong>Paramètres &gt; Modèles</strong> de l'application hôte.
+            <strong>{t('bmad2.visuals.apiKeyWarningTitle')}</strong> {t('bmad2.visuals.apiKeyWarningBody1')} <strong>{t('bmad2.visuals.vertexAI')}</strong> {t('bmad2.visuals.apiKeyWarningBody2')} <strong>{t('bmad2.visuals.settingsPath')}</strong> {t('bmad2.visuals.apiKeyWarningBody3')}
           </div>
         )}
 
@@ -412,12 +412,12 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
             {isGeneratingVisual === 'diagram' ? (
               <>
                 <BrainLoader size={16} />
-                <span>Génération...</span>
+                <span>{t('bmad2.visuals.generating')}</span>
               </>
             ) : (
               <>
                 <Palette className="w-4 h-4 text-accent" />
-                <span>Générer Diagramme SVG</span>
+                <span>{t('bmad2.visuals.generateDiagram')}</span>
               </>
             )}
           </button>
@@ -431,12 +431,12 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
             {isGeneratingVisual === 'slides' ? (
               <>
                 <BrainLoader size={16} />
-                <span>Génération...</span>
+                <span>{t('bmad2.visuals.generating')}</span>
               </>
             ) : (
               <>
                 <FileText className="w-4 h-4 text-accent" />
-                <span>Générer Slides HTML</span>
+                <span>{t('bmad2.visuals.generateSlides')}</span>
               </>
             )}
           </button>
@@ -446,38 +446,38 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
         {generatedSvg && (
           <div style={{ borderTop: '1px solid var(--border-glass)', paddingTop: '16px', marginBottom: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <h3 style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>📐 Aperçu du Diagramme SVG</h3>
+              <h3 style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>{t('bmad2.visuals.diagramPreviewTitle')}</h3>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <button
                   onClick={() => setActiveModal('diagram')}
                   className="tech-button"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
-                  <Maximize2 className="w-3.5 h-3.5" /> Agrandir
+                  <Maximize2 className="w-3.5 h-3.5" /> {t('bmad2.visuals.expand')}
                 </button>
                 <button
                   onClick={() => saveVisualFile('diagram')}
                   className="tech-button primary"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px' }}
                 >
-                  Sauvegarder dans le projet
+                  {t('bmad2.visuals.saveToProject')}
                 </button>
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(generatedSvg);
-                    showToast("Code SVG copié !", "success");
+                    showToast(t('bmad2.visuals.svgCopiedToast'), "success");
                   }}
                   className="tech-button"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px' }}
                 >
-                  Copier le SVG
+                  {t('bmad2.visuals.copySvg')}
                 </button>
                 <button
                   onClick={() => setGeneratedSvg('')}
                   className="tech-button"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px', color: 'var(--text-muted)' }}
                 >
-                  Masquer
+                  {t('bmad2.visuals.hide')}
                 </button>
               </div>
             </div>
@@ -504,38 +504,38 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
         {generatedHtml && (
           <div style={{ borderTop: '1px solid var(--border-glass)', paddingTop: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <h3 style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>📊 Aperçu de la Présentation Interactive</h3>
+              <h3 style={{ fontSize: '12.5px', fontWeight: 600, color: 'var(--text-primary)' }}>{t('bmad2.visuals.slidesPreviewTitle')}</h3>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <button
                   onClick={() => setActiveModal('slides')}
                   className="tech-button"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
-                  <Maximize2 className="w-3.5 h-3.5" /> Agrandir
+                  <Maximize2 className="w-3.5 h-3.5" /> {t('bmad2.visuals.expand')}
                 </button>
                 <button
                   onClick={() => saveVisualFile('slides')}
                   className="tech-button primary"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px' }}
                 >
-                  Sauvegarder dans le projet
+                  {t('bmad2.visuals.saveToProject')}
                 </button>
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(generatedHtml);
-                    showToast("Code HTML copié !", "success");
+                    showToast(t('bmad2.visuals.htmlCopiedToast'), "success");
                   }}
                   className="tech-button"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px' }}
                 >
-                  Copier le HTML
+                  {t('bmad2.visuals.copyHtml')}
                 </button>
                 <button
                   onClick={() => setGeneratedHtml('')}
                   className="tech-button"
                   style={{ fontSize: '10.5px', padding: '4px 10px', borderRadius: '6px', color: 'var(--text-muted)' }}
                 >
-                  Masquer
+                  {t('bmad2.visuals.hide')}
                 </button>
               </div>
             </div>

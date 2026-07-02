@@ -1,13 +1,41 @@
 import { BmadData } from '../types/bmad.types';
 
+/** Locale-aware column headers and empty-list fallbacks (default = English). */
+export interface SvgDiagramLabels {
+  actorsFallback: string;
+  structureFallback: string;
+  techStackFallback: string;
+  milestonesFallback: string;
+  colActors: string;
+  colStructure: string;
+  colTechStack: string;
+  colMilestones: string;
+}
+
+const DEFAULT_LABELS: SvgDiagramLabels = {
+  actorsFallback: 'Users & Systems',
+  structureFallback: 'Structure & Core',
+  techStackFallback: 'Tech Stack',
+  milestonesFallback: 'Key Milestones',
+  colActors: 'Actors & Inputs',
+  colStructure: 'Key Components',
+  colTechStack: 'Technologies & Stack',
+  colMilestones: 'Milestones & Metrics',
+};
+
 /**
  * Generates a deterministic high-fidelity SVG architecture diagram based on project configuration.
  *
  * @param projectName - The active name of the project.
  * @param bmadData - The detailed BMAD steps object containing actors, stack, kpis, etc.
+ * @param labels - Locale-aware column headers/fallbacks; defaults to English if omitted.
  * @returns A string representing the formatted inline SVG code.
  */
-export const generateSvgFromData = (projectName: string, bmadData: BmadData): string => {
+export const generateSvgFromData = (
+  projectName: string,
+  bmadData: BmadData,
+  labels: SvgDiagramLabels = DEFAULT_LABELS,
+): string => {
   const escapeXml = (str: string) => {
     if (!str) return '';
     return str
@@ -57,10 +85,10 @@ export const generateSvgFromData = (projectName: string, bmadData: BmadData): st
   const milestones = cleanList(bmadData.delivery.milestones || '');
   const kpis = cleanList(bmadData.delivery.kpis || '');
 
-  if (actors.length === 0) actors.push("Utilisateurs &amp; Systèmes");
-  if (structures.length === 0) structures.push("Structure &amp; Cœur");
-  if (techStack.length === 0) techStack.push("Stack Technique");
-  if (milestones.length === 0) milestones.push("Jalons Clés");
+  if (actors.length === 0) actors.push(labels.actorsFallback);
+  if (structures.length === 0) structures.push(labels.structureFallback);
+  if (techStack.length === 0) techStack.push(labels.techStackFallback);
+  if (milestones.length === 0) milestones.push(labels.milestonesFallback);
 
   const width = 1000;
   const height = 460;
@@ -94,11 +122,11 @@ export const generateSvgFromData = (projectName: string, bmadData: BmadData): st
     });
   };
 
-  const col1Cards = getCardsForCol(actors, xCol1, "Acteurs & Entrées", "user");
-  const col2Cards = getCardsForCol(structures, xCol2, "Composants Clés", "cpu");
-  const col3Cards = getCardsForCol(techStack, xCol3, "Technologies & Stack", "code");
+  const col1Cards = getCardsForCol(actors, xCol1, labels.colActors, "user");
+  const col2Cards = getCardsForCol(structures, xCol2, labels.colStructure, "cpu");
+  const col3Cards = getCardsForCol(techStack, xCol3, labels.colTechStack, "code");
   const col4Items = milestones.concat(kpis);
-  const col4Cards = getCardsForCol(col4Items, xCol4, "Jalons & Indicateurs", "target");
+  const col4Cards = getCardsForCol(col4Items, xCol4, labels.colMilestones, "target");
 
   const allColumns = [col1Cards, col2Cards, col3Cards, col4Cards];
 

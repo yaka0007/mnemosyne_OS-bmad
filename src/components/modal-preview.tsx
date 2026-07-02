@@ -1,5 +1,6 @@
 import React from 'react';
 import { Palette, FileText } from 'lucide-react';
+import { useTranslation } from '../i18n';
 
 /**
  * Props for the ModalPreview component.
@@ -25,6 +26,7 @@ export const ModalPreview: React.FC<ModalPreviewProps> = ({
   generatedHtml,
   onClose
 }) => {
+  const { t } = useTranslation();
   if (!activeModal) return null;
 
   return (
@@ -60,12 +62,12 @@ export const ModalPreview: React.FC<ModalPreviewProps> = ({
             {activeModal === 'diagram' ? (
               <>
                 <Palette className="w-5 h-5 text-accent" />
-                <span>📐 Diagramme d'Architecture Agrandi</span>
+                <span>{t('bmad2.modal.diagramTitle')}</span>
               </>
             ) : (
               <>
                 <FileText className="w-5 h-5 text-accent" />
-                <span>📊 Diaporama de Présentation Agrandi</span>
+                <span>{t('bmad2.modal.slidesTitle')}</span>
               </>
             )}
           </h3>
@@ -74,7 +76,7 @@ export const ModalPreview: React.FC<ModalPreviewProps> = ({
             className="tech-button primary"
             style={{ padding: '6px 14px', borderRadius: '6px', fontSize: '12px' }}
           >
-            Fermer
+            {t('bmad2.modal.close')}
           </button>
         </div>
 
