@@ -335,14 +335,16 @@ export default function App() {
         await handleSaveDraft(true, { chatMessages: withUserMsg });
       }
 
+      const pl = (key: string, opts?: any) => t(`bmad2.promptLabels.${key}`, opts);
+
       let linksCtx = '';
       const checkedPaths = Object.keys(resonanceCheckboxes).filter(p => resonanceCheckboxes[p]);
       if (checkedPaths.length > 0) {
-        linksCtx = '\n\n[PROJETS EN RÉSONANCE LIÉS] :\n';
+        linksCtx = `\n\n${pl('resonanceHeader')} :\n`;
         checkedPaths.forEach((path) => {
           const matchPr = bmadProjects.find(p => p._filePath === path);
           if (matchPr) {
-            linksCtx += `- Projet "${matchPr.name}" : ${matchPr.description || 'Pas de description'}\n`;
+            linksCtx += `- ${pl('resonanceProject')} "${matchPr.name}" : ${matchPr.description || pl('noDescription')}\n`;
           }
         });
       }
@@ -350,48 +352,48 @@ export default function App() {
       // Construct dynamic page context
       const bmadStateContext = `
 
-[CONTEXTE DU PROJET ACTUEL EN PAGE]
-Nom du projet : ${projectName || 'Non spécifié'}
-Description : ${description || 'Non spécifiée'}
-Catégorie : ${projectCategory || 'Logiciel'}
-Dossier d'export : ${customExportPath || `${vaultRoot}/BMAD/${projectName || 'Projet_Sans_Nom'}`}
+${pl('pageContextHeader')}
+${pl('projectName')} : ${projectName || pl('notSpecified')}
+${pl('description')} : ${description || pl('notSpecified')}
+${pl('category')} : ${projectCategory || pl('defaultCategory')}
+${pl('exportFolder')} : ${customExportPath || `${vaultRoot}/BMAD/${projectName || 'Projet_Sans_Nom'}`}
 
-[DONNÉES DU CADRAGE BMAD ACTUELLES]
-Phase 1 (Brief) :
-- Objectif principal : ${bmadData.brief.objective || '(vide)'}
-- Problème à résoudre : ${bmadData.brief.problem || '(vide)'}
-- Périmètre initial (MVP) : ${bmadData.brief.scope || '(vide)'}
-- Notes Brief : ${bmadData.brief.notes || '(vide)'}
+${pl('bmadDataHeader')}
+${pl('phase1Label')} :
+- ${t('bmad2.step3.objective')} : ${bmadData.brief.objective || pl('emptyValue')}
+- ${t('bmad2.step3.problem')} : ${bmadData.brief.problem || pl('emptyValue')}
+- ${t('bmad2.step3.scope')} : ${bmadData.brief.scope || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('bmad2.step3.briefTab') })} : ${bmadData.brief.notes || pl('emptyValue')}
 
-Phase 2 (Mapping) :
-- Acteurs : ${bmadData.mapping.actors || '(vide)'}
-- Ressources : ${bmadData.mapping.resources || '(vide)'}
-- Risques : ${bmadData.mapping.risks || '(vide)'}
-- Notes Mapping : ${bmadData.mapping.notes || '(vide)'}
+${pl('phase2Label')} :
+- ${t('bmad2.step3.actors')} : ${bmadData.mapping.actors || pl('emptyValue')}
+- ${t('bmad2.step3.resources')} : ${bmadData.mapping.resources || pl('emptyValue')}
+- ${t('bmad2.step3.risks')} : ${bmadData.mapping.risks || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('bmad2.step3.mappingTab') })} : ${bmadData.mapping.notes || pl('emptyValue')}
 
-Phase 3 (Architecture) :
-- Structure : ${bmadData.architecture.structure || '(vide)'}
-- Stack Technique : ${bmadData.architecture.techStack || '(vide)'}
-- Arbitrages : ${bmadData.architecture.tradeoffs || '(vide)'}
-- Notes Architecture : ${bmadData.architecture.notes || '(vide)'}
+${pl('phase3Label')} :
+- ${t('bmad2.step3.structure')} : ${bmadData.architecture.structure || pl('emptyValue')}
+- ${t('bmad2.step3.techStack')} : ${bmadData.architecture.techStack || pl('emptyValue')}
+- ${t('bmad2.step3.tradeoffs')} : ${bmadData.architecture.tradeoffs || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('bmad2.step3.architectureTab') })} : ${bmadData.architecture.notes || pl('emptyValue')}
 
-Phase 4 (Delivery) :
-- Jalons : ${bmadData.delivery.milestones || '(vide)'}
-- Validation : ${bmadData.delivery.validation || '(vide)'}
-- KPIs : ${bmadData.delivery.kpis || '(vide)'}
-- Notes Delivery : ${bmadData.delivery.notes || '(vide)'}
+${pl('phase4Label')} :
+- ${t('bmad2.step3.milestones')} : ${bmadData.delivery.milestones || pl('emptyValue')}
+- ${t('bmad2.step3.validation')} : ${bmadData.delivery.validation || pl('emptyValue')}
+- ${t('bmad2.step3.kpis')} : ${bmadData.delivery.kpis || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('bmad2.step3.deliveryTab') })} : ${bmadData.delivery.notes || pl('emptyValue')}
 `;
 
       // File creation system prompt instruction
       const fileCreationInstruction = `
 
-[CONSIGNE SUPPRÉMENTAIRE - CRÉATION DE FICHIERS ANNEXES]
-Si l'utilisateur te demande de générer, d'écrire ou de créer un fichier annexe (par exemple : des user stories, un plan de test, un log de risques, ou tout autre document complémentaire), tu peux écrire le fichier sur son disque en utilisant la syntaxe textuelle suivante dans ta réponse :
+${pl('fileCreationHeader')}
+${pl('fileCreationBody')}
 [CREATE_FILE: nom_du_fichier.md]
-# Titre du document annexe
-Contenu du document ici...
+# ${pl('fileCreationDocTitle')}
+${pl('fileCreationDocBody')}
 [END_CREATE_FILE]
-Tu peux utiliser cette syntaxe autant de fois que nécessaire. L'application l'interceptera pour écrire les fichiers physiques sur le disque dans le dossier projet. Rédige en français sous format Markdown standard.
+${pl('fileCreationSyntaxNote')} ${pl('fileCreationWriteIn', { language: t('doc.aiLanguage') })}
 `;
 
       const activeSoul = SOUL_PRESETS.find(s => s.id === selectedSoul);
@@ -505,17 +507,17 @@ Tu peux utiliser cette syntaxe autant de fois que nécessaire. L'application l'i
       });
 
       const contextBlocks: string[] = [];
-      contextBlocks.push(`Nom du projet : ${projectName}`);
-      if (description) contextBlocks.push(`Description : ${description}`);
-      if (projectCategory) contextBlocks.push(`Catégorie : ${projectCategory}`);
+      contextBlocks.push(`${t('bmad2.promptLabels.projectName')} : ${projectName}`);
+      if (description) contextBlocks.push(`${t('bmad2.promptLabels.description')} : ${description}`);
+      if (projectCategory) contextBlocks.push(`${t('bmad2.promptLabels.category')} : ${projectCategory}`);
       if (hashtags && hashtags.length > 0) {
-        contextBlocks.push(`Tags : ${hashtags.map(t => `#${t}`).join(' ')}`);
+        contextBlocks.push(`${t('bmad2.promptLabels.tags')} : ${hashtags.map(h => `#${h}`).join(' ')}`);
       }
 
       if (filledContext.length > 0) {
-        contextBlocks.push(`\n[ÉLÉMENTS DÉJÀ DÉFINIS DE LA STRUCTURE BMAD]`);
+        contextBlocks.push(`\n${t('bmad2.promptLabels.definedElementsHeader')}`);
         contextBlocks.push(filledContext.join('\n'));
-        contextBlocks.push(`[FIN DES ÉLÉMENTS DÉFINIS]`);
+        contextBlocks.push(t('bmad2.promptLabels.definedElementsFooter'));
       }
 
       let systemPrompt = '';
@@ -580,34 +582,35 @@ Tu peux utiliser cette syntaxe autant de fois que nécessaire. L'application l'i
     setReviewOutput('');
 
     try {
+      const pl = (key: string, opts?: any) => t(`bmad2.promptLabels.${key}`, opts);
       const compiled = `
-# PROJET : ${projectName}
-Description: ${description}
-Catégorie: ${projectCategory}
+# ${pl('reviewProjectHeader')} : ${projectName}
+${pl('description')}: ${description}
+${pl('category')}: ${projectCategory}
 
-## BRIEF
-- Objectif principal: ${bmadData.brief.objective}
-- Problème à résoudre: ${bmadData.brief.problem}
-- Périmètre MVP: ${bmadData.brief.scope}
-- Notes Brief: ${bmadData.brief.notes}
+## ${pl('reviewBriefHeader')}
+- ${t('bmad2.step3.objective')}: ${bmadData.brief.objective}
+- ${t('bmad2.step3.problem')}: ${bmadData.brief.problem}
+- ${t('bmad2.step3.scope')}: ${bmadData.brief.scope}
+- ${pl('notesFor', { phase: t('bmad2.step3.briefTab') })}: ${bmadData.brief.notes}
 
-## MAPPING
-- Acteurs: ${bmadData.mapping.actors}
-- Ressources: ${bmadData.mapping.resources}
-- Risques: ${bmadData.mapping.risks}
-- Notes Mapping: ${bmadData.mapping.notes}
+## ${pl('reviewMappingHeader')}
+- ${t('bmad2.step3.actors')}: ${bmadData.mapping.actors}
+- ${t('bmad2.step3.resources')}: ${bmadData.mapping.resources}
+- ${t('bmad2.step3.risks')}: ${bmadData.mapping.risks}
+- ${pl('notesFor', { phase: t('bmad2.step3.mappingTab') })}: ${bmadData.mapping.notes}
 
-## ARCHITECTURE
-- Structure globale: ${bmadData.architecture.structure}
-- Stack technique: ${bmadData.architecture.techStack}
-- Arbitrages: ${bmadData.architecture.tradeoffs}
-- Notes Architecture: ${bmadData.architecture.notes}
+## ${pl('reviewArchHeader')}
+- ${pl('reviewGlobalStructure')}: ${bmadData.architecture.structure}
+- ${pl('reviewTechStack')}: ${bmadData.architecture.techStack}
+- ${t('bmad2.step3.tradeoffs')}: ${bmadData.architecture.tradeoffs}
+- ${pl('notesFor', { phase: t('bmad2.step3.architectureTab') })}: ${bmadData.architecture.notes}
 
-## DELIVERY
-- Jalons & Planning: ${bmadData.delivery.milestones}
-- Critères de validation: ${bmadData.delivery.validation}
-- KPIs: ${bmadData.delivery.kpis}
-- Notes Delivery: ${bmadData.delivery.notes}
+## ${pl('reviewDeliveryHeader')}
+- ${pl('reviewMilestonesPlanning')}: ${bmadData.delivery.milestones}
+- ${pl('reviewValidationCriteria')}: ${bmadData.delivery.validation}
+- ${t('bmad2.step3.kpis')}: ${bmadData.delivery.kpis}
+- ${pl('notesFor', { phase: t('bmad2.step3.deliveryTab') })}: ${bmadData.delivery.notes}
       `;
 
       const systemPrompt = t('ai.reviewerSystemPrompt', { language: t('doc.aiLanguage') || 'français' });
@@ -913,7 +916,7 @@ Catégorie: ${projectCategory}
   const generateVisualSlides = async () => {
     setIsGeneratingVisual('slides');
     try {
-      const prompt = getHtmlSlidesPrompt(projectName, description, projectCategory, bmadData);
+      const prompt = getHtmlSlidesPrompt(projectName, description, projectCategory, bmadData, t('doc.aiLanguage'));
       const res = await sdk.inferModel({
         prompt,
         systemPrompt: SLIDES_SYSTEM_PROMPT,

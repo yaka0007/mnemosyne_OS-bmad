@@ -18,9 +18,12 @@ export const getHtmlSlidesPrompt = (
   projectName: string,
   description: string,
   projectCategory: string,
-  bmadData: BmadData
+  bmadData: BmadData,
+  language: string = 'English'
 ): string => {
-  return `Crée une présentation de diapositives interactive (HTML/CSS/JS) décrivant les fondations et le cadrage du projet BMAD suivant :
+  return `[OUTPUT LANGUAGE] Write ALL visible text in ${language} — slide titles, body text, bullet points, and the navigation button labels (translate "Précédent"/"Suivant"/"Slide" into ${language}).
+
+Crée une présentation de diapositives interactive (HTML/CSS/JS) décrivant les fondations et le cadrage du projet BMAD suivant :
 Nom du projet: ${projectName}
 Description: ${description}
 Catégorie: ${projectCategory}
