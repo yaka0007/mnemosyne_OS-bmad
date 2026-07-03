@@ -3,6 +3,7 @@
   "displayName": "BMAD 2.0",
   "version": "1.0.0",
   "description": "Brief - Mapping - Architecture - Delivery. Complete multi-step wizard for project design and validation.",
+  "repository": "https://github.com/yaka0007/mnemosyne_OS-bmad",
   "permissions": [
     "vault:read",
     "vault:write",
