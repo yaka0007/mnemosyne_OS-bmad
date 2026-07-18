@@ -57,7 +57,7 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({
                 className={`tech-button ${userMode === mode ? 'primary' : ''}`}
                 style={{ flex: 1, textTransform: 'capitalize', borderRadius: '8px' }}
               >
-                {t('bmad2.step2.mode' + mode.charAt(0).toUpperCase() + mode.slice(1)) || mode}
+                {t('bmad2.step2.mode' + mode.charAt(0).toUpperCase() + mode.slice(1))}
               </button>
             ))}
           </div>
@@ -69,9 +69,9 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({
           </label>
           <div style={{ display: 'flex', gap: '8px' }}>
             {[
-              { id: 'local_only', name: t('options.telemetry.local_only') || 'Local Only' },
-              { id: 'opt_in_remote', name: t('options.telemetry.opt_in_remote') || 'Opt-In Remote' },
-              { id: 'full_remote', name: t('options.telemetry.full_remote') || 'Full Remote' }
+              { id: 'local_only', name: t('options.telemetry.local_only') },
+              { id: 'opt_in_remote', name: t('options.telemetry.opt_in_remote') },
+              { id: 'full_remote', name: t('options.telemetry.full_remote') }
             ].map(tMode => (
               <button
                 key={tMode.id}
@@ -91,9 +91,9 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({
           </label>
           <div style={{ display: 'flex', gap: '8px' }}>
             {[
-              { id: 'manual_only', name: t('options.proactive.manual_only') || 'Manual Only' },
-              { id: 'soft_proactive', name: t('options.proactive.soft_proactive') || 'Soft Proactive' },
-              { id: 'strong_proactive', name: t('options.proactive.strong_proactive') || 'Strong Proactive' }
+              { id: 'manual_only', name: t('options.proactive.manual_only') },
+              { id: 'soft_proactive', name: t('options.proactive.soft_proactive') },
+              { id: 'strong_proactive', name: t('options.proactive.strong_proactive') }
             ].map(pMode => (
               <button
                 key={pMode.id}
@@ -110,7 +110,7 @@ export const SettingsStep: React.FC<SettingsStepProps> = ({
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '12px' }}>
           <button onClick={() => setCurrentStep(1)} className="tech-button">{t('bmad2.actions.back')}</button>
           <button onClick={() => setCurrentStep(3)} className="tech-button primary">
-            {t('bmad2.actions.continue') || 'Continuer'} <ArrowRight className="w-4 h-4" />
+            {t('bmad2.actions.continue')} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

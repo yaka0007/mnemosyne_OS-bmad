@@ -356,7 +356,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
                   borderColor: useVaultMemory ? 'var(--accent)' : undefined,
                   color: useVaultMemory ? 'var(--text-primary)' : 'var(--text-muted)'
                 }}
-                title={useVaultMemory ? t('chat.vaultMemoryActive') || "Mémoire globale active (RAG)" : t('chat.vaultMemoryInactive') || "Mémoire globale désactivée (LLM Brut)"}
+                title={useVaultMemory ? t('bmad2.chat.vaultMemoryActive') : t('bmad2.chat.vaultMemoryInactive')}
               >
                 <Database className="w-4 h-4" />
               </button>
@@ -368,7 +368,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
               type="text"
               className="tech-input"
               style={{ flex: 1, borderRadius: '8px' }}
-              placeholder={t('bmad2.chat.placeholder') || "Aide-moi à rédiger mon brief..."}
+              placeholder={t('bmad2.chat.placeholder')}
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               disabled={isSendingChat}

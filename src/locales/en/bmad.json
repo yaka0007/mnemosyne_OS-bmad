@@ -180,7 +180,9 @@
     "aiLanguage": "English",
     "aiLanguagePrompt": "Language: English.",
     "aiRespondIn": "Respond in English",
-    "empty": "(empty)"
+    "empty": "(empty)",
+    "version": "Version",
+    "untitledProject": "Untitled_Project"
   },
   "errors": {
     "title": "BMAD error",
@@ -410,7 +412,8 @@
       "resonanceCreated": "Project \"{{name}}\" created.",
       "resonanceCreatedTitle": "Resonance project created",
       "createError": "Unable to create project.",
-      "createErrorTitle": "Error"
+      "createErrorTitle": "Error",
+      "projectVersion": "Version"
     },
     "step2": {
       "title": "AI & Behavior Configuration",
@@ -609,7 +612,8 @@
       "selectAll": "Select all",
       "deselectAll": "Deselect all",
       "applyCorrections": "Apply selected corrections and return to fields (Step 3)",
-      "exportFolderTarget": "Target export folder"
+      "exportFolderTarget": "Target export folder",
+      "critique": "Critique"
     },
     "confirm": {
       "deleteProject": "Permanently delete the BMAD project \"{{project}}\"?"
@@ -690,6 +694,10 @@
           "kpis": "Revenue, CAC (customer acquisition cost), LTV (lifetime value)?"
         }
       }
+    },
+    "tile": {
+      "projects": "Projects",
+      "ideas": "Ideas"
     }
   }
 }

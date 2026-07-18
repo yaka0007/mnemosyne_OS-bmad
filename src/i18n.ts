@@ -3,19 +3,28 @@ import frBmad from './locales/fr/bmad.json';
 import enBmad from './locales/en/bmad.json';
 import esBmad from './locales/es/bmad.json';
 
+const SUPPORTED_LANGS = ['en', 'fr', 'es'] as const;
+
+/** Clamp any BCP-47-ish input ('fr-FR', 'es', 'de'…) onto a supported pack. */
+const normalizeLang = (lang: string | null | undefined): string => {
+  const short = (lang || '').slice(0, 2).toLowerCase();
+  return (SUPPORTED_LANGS as readonly string[]).includes(short) ? short : 'en';
+};
+
 // Detect host language via URL query parameter or fallback to system locale
 const getInitialLang = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get('lang') || navigator.language.slice(0, 2) || 'fr';
+  return normalizeLang(urlParams.get('lang') || navigator.language);
 };
 
 let currentLang = getInitialLang();
 const listeners = new Set<(lang: string) => void>();
 
 export function setLanguage(newLang: string) {
-  if (newLang === currentLang) return;
-  currentLang = newLang;
-  listeners.forEach(l => l(newLang));
+  const next = normalizeLang(newLang);
+  if (next === currentLang) return;
+  currentLang = next;
+  listeners.forEach(l => l(next));
 }
 
 export function useTranslation() {
@@ -29,7 +38,7 @@ export function useTranslation() {
     };
   }, []);
 
-  const bmadPack: any = lang === 'en' ? enBmad : lang === 'es' ? esBmad : frBmad;
+  const bmadPack: any = lang === 'fr' ? frBmad : lang === 'es' ? esBmad : enBmad;
 
   const t = (key: string, options?: any): any => {
     const resolve = (pathArr: string[]): any => {

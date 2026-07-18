@@ -26,6 +26,13 @@ import ValidationStep from './components/steps/validation-step';
 
 const sdk = new MnemoCartridgeSDK('@mnemosyne-plugins/bmad-2');
 
+/** Stable DJB2 hash — keys the per-vault idempotency map for project sync. */
+function hashString(s: string): string {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+
 /**
  * Renders the main entry point of the BMAD-2.0 cartridge.
  * Orchestrates navigation flow, project data persistence, and chat/visual modules integration.
@@ -43,6 +50,8 @@ export default function App() {
   const [vaultRoot, setVaultRoot] = useState<string>('');
   const [bmadProjects, setBmadProjects] = useState<any[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(false);
+  // Name of this app's walled-off sandbox vault (`APP-BMAD-2`) once ensured.
+  const [sandboxVault, setSandboxVault] = useState<string>('');
 
   // App Navigation
   const [currentStep, setCurrentStep] = useState(0); // 0: Landing, 1: Init, 2: AI Settings, 3: Flow, 4: Review
@@ -159,20 +168,30 @@ export default function App() {
     }
   }, [toast]);
 
+  // The welcome message is snapshotted into chat state at mount, so a language
+  // switch would leave it stale — refresh it as long as the chat is untouched.
+  useEffect(() => {
+    setChatMessages(prev =>
+      prev.length === 1 && prev[0]?.role === 'assistant'
+        ? [{ role: 'assistant', content: t('bmad2.chat.welcomeMessage') }]
+        : prev
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- t identity follows the language
+  }, [i18n.language]);
+
   // Sync theme from host
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const initialTheme = params.get('theme') as 'dark' | 'light' | null;
     if (initialTheme) setTheme(initialTheme);
 
+    // MNEMO_CONFIG_UPDATE is the host contract (PluginWidget/PluginStandaloneHost)
+    // with a FLAT payload — the app previously listened for a message type no host
+    // ever sent, so live theme/lang switches never reached it.
     const handleSync = (event: MessageEvent) => {
-      if (event.data?.type === 'MNEMOSYNE_CONFIG_SYNC') {
-        const themeVal = event.data.config?.theme;
-        if (themeVal) setTheme(themeVal);
-        const langVal = event.data.config?.lang;
-        if (langVal) {
-          setLanguage(langVal);
-        }
+      if (event.data?.type === 'MNEMO_CONFIG_UPDATE') {
+        if (event.data.theme) setTheme(event.data.theme);
+        if (event.data.lang) setLanguage(event.data.lang);
       }
     };
     window.addEventListener('message', handleSync);
@@ -232,7 +251,69 @@ export default function App() {
         }
       })
       .catch((err) => console.warn('Could not retrieve active vault config:', err));
+
+    // ── App sandbox vault (doc 58) ──────────────────────────────────────────
+    // Ensure the walled-off `APP-BMAD-2` vault and declare its Vault Pad tile.
+    // Projects are catalogued into it (below) so Mnemosyne knows how many
+    // projects — and project ideas — exist. Isolated until the human unlocks.
+    sdk.ensureSandbox()
+      .then((sb) => {
+        if (!sb?.vault) return;
+        setSandboxVault(sb.vault);
+        // Tile labels are frozen host-side with the language active at declare
+        // time — the tile outlives the app, so it cannot re-translate live.
+        return sdk.describeVaultTile({
+          icon: '📋',
+          metrics: [
+            { label: t('bmad2.tile.projects'), spine: 'SOCIAL_CONTACT' },
+            { label: t('bmad2.tile.ideas'), spine: 'SOCIAL_NODE' },
+          ],
+        });
+      })
+      .catch((err) => console.warn('Could not ensure BMAD sandbox vault:', err));
   }, [scanVaultProjects]);
+
+  // Catalogue sync — each BMAD project becomes one SOCIAL_CONTACT chronicle
+  // (the "Projets" count) plus one SOCIAL_NODE noting it as a project idea with
+  // its status (the "Idées" count), so the federated memory is aware there are
+  // project ideas in progress. Idempotent via a per-vault localStorage hash map.
+  useEffect(() => {
+    if (!sandboxVault.startsWith('APP-') || bmadProjects.length === 0) return;
+    let cancelled = false;
+    (async () => {
+      const key = `bmad2_synced_v1:${sandboxVault}`;
+      let synced: Record<string, string> = {};
+      try { synced = JSON.parse(localStorage.getItem(key) || '{}'); } catch { synced = {}; }
+      let pushed = 0;
+      for (const p of bmadProjects) {
+        const pid: string = p._filePath || p.name || JSON.stringify(p).slice(0, 40);
+        const name = p.name || 'Untitled project';
+        const category = p.category || 'other';
+        const desc = (p.description || '').toString().slice(0, 800);
+        const version = p.version || '—';
+        const updated = p.updatedAt || '';
+        const profile = `Project: ${name}. Category: ${category}. Version: ${version}. ${desc}`.trim();
+        const idea = `Project idea "${name}" (${category}) — a BMAD 2.0 draft in progress${updated ? `, last updated ${updated}` : ''}.`;
+        const h = hashString(profile + '::' + idea);
+        if (synced[pid] === h) continue;
+        try {
+          await sdk.socialIngest(sandboxVault, profile, 'SOCIAL_CONTACT');
+          await sdk.socialIngest(sandboxVault, idea, 'SOCIAL_NODE');
+          if (cancelled) return;
+          synced[pid] = h;
+          pushed++;
+        } catch (err) {
+          console.warn(`[BMAD] project sync failed for "${name}":`, err);
+        }
+      }
+      if (pushed > 0 && !cancelled) {
+        localStorage.setItem(key, JSON.stringify(synced));
+        console.log(`[BMAD] ${pushed} project(s) catalogued into ${sandboxVault}`);
+      }
+    })();
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sandboxVault, bmadProjects]);
 
   /** Initialize states for a new project draft */
   const handleCreateNewProject = () => {
@@ -356,32 +437,32 @@ ${pl('pageContextHeader')}
 ${pl('projectName')} : ${projectName || pl('notSpecified')}
 ${pl('description')} : ${description || pl('notSpecified')}
 ${pl('category')} : ${projectCategory || pl('defaultCategory')}
-${pl('exportFolder')} : ${customExportPath || `${vaultRoot}/BMAD/${projectName || 'Projet_Sans_Nom'}`}
+${pl('exportFolder')} : ${customExportPath || `${vaultRoot}/BMAD/${projectName || t('doc.untitledProject')}`}
 
 ${pl('bmadDataHeader')}
 ${pl('phase1Label')} :
 - ${t('bmad2.step3.objective')} : ${bmadData.brief.objective || pl('emptyValue')}
 - ${t('bmad2.step3.problem')} : ${bmadData.brief.problem || pl('emptyValue')}
 - ${t('bmad2.step3.scope')} : ${bmadData.brief.scope || pl('emptyValue')}
-- ${pl('notesFor', { phase: t('bmad2.step3.briefTab') })} : ${bmadData.brief.notes || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('steps.brief.title') })} : ${bmadData.brief.notes || pl('emptyValue')}
 
 ${pl('phase2Label')} :
 - ${t('bmad2.step3.actors')} : ${bmadData.mapping.actors || pl('emptyValue')}
 - ${t('bmad2.step3.resources')} : ${bmadData.mapping.resources || pl('emptyValue')}
 - ${t('bmad2.step3.risks')} : ${bmadData.mapping.risks || pl('emptyValue')}
-- ${pl('notesFor', { phase: t('bmad2.step3.mappingTab') })} : ${bmadData.mapping.notes || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('steps.mapping.title') })} : ${bmadData.mapping.notes || pl('emptyValue')}
 
 ${pl('phase3Label')} :
 - ${t('bmad2.step3.structure')} : ${bmadData.architecture.structure || pl('emptyValue')}
 - ${t('bmad2.step3.techStack')} : ${bmadData.architecture.techStack || pl('emptyValue')}
 - ${t('bmad2.step3.tradeoffs')} : ${bmadData.architecture.tradeoffs || pl('emptyValue')}
-- ${pl('notesFor', { phase: t('bmad2.step3.architectureTab') })} : ${bmadData.architecture.notes || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('steps.architecture.title') })} : ${bmadData.architecture.notes || pl('emptyValue')}
 
 ${pl('phase4Label')} :
 - ${t('bmad2.step3.milestones')} : ${bmadData.delivery.milestones || pl('emptyValue')}
 - ${t('bmad2.step3.validation')} : ${bmadData.delivery.validation || pl('emptyValue')}
 - ${t('bmad2.step3.kpis')} : ${bmadData.delivery.kpis || pl('emptyValue')}
-- ${pl('notesFor', { phase: t('bmad2.step3.deliveryTab') })} : ${bmadData.delivery.notes || pl('emptyValue')}
+- ${pl('notesFor', { phase: t('steps.delivery.title') })} : ${bmadData.delivery.notes || pl('emptyValue')}
 `;
 
       // File creation system prompt instruction
@@ -397,7 +478,9 @@ ${pl('fileCreationSyntaxNote')} ${pl('fileCreationWriteIn', { language: t('doc.a
 `;
 
       const activeSoul = SOUL_PRESETS.find(s => s.id === selectedSoul);
-      const systemPrompt = (activeSoul ? activeSoul.prompt : '') + linksCtx + bmadStateContext + fileCreationInstruction;
+      // Soul presets are written in English; the reply must follow the UI language.
+      const languageDirective = `\n\n${t('doc.aiRespondIn')}.`;
+      const systemPrompt = (activeSoul ? activeSoul.prompt : '') + linksCtx + bmadStateContext + fileCreationInstruction + languageDirective;
 
       const response = await sdk.inferModel({
         prompt: userMsg,
@@ -425,7 +508,7 @@ ${pl('fileCreationSyntaxNote')} ${pl('fileCreationWriteIn', { language: t('doc.a
           const fileContent = match[2]!.trim();
           
           if (filename && fileContent) {
-            const safeProjName = projectName.trim().replace(/[^a-zA-Z0-9-_]/g, '_') || 'Projet_Sans_Nom';
+            const safeProjName = projectName.trim().replace(/[^a-zA-Z0-9-_]/g, '_') || t('doc.untitledProject');
             const targetDir = (completedPath || customExportPath || `${vaultRoot}/BMAD/${safeProjName}`).replace(/\\/g, '/');
             
             // Invoke mkdir and writeFile asynchronously
@@ -468,18 +551,18 @@ ${pl('fileCreationSyntaxNote')} ${pl('fileCreationWriteIn', { language: t('doc.a
   /** Assist field-level rephrasing or contextual drafting */
   const handleFieldAiAssist = async (phase: string, field: string, currentValue?: string) => {
     const fieldLabels: Record<string, string> = {
-      objective: t('bmad2.step3.objective') || 'Objective',
-      problem: t('bmad2.step3.problem') || 'Problem',
-      scope: t('bmad2.step3.scope') || 'Scope',
-      actors: t('bmad2.step3.actors') || 'Actors',
-      resources: t('bmad2.step3.resources') || 'Resources',
-      risks: t('bmad2.step3.risks') || 'Risks',
-      structure: t('bmad2.step3.structure') || 'Structure',
-      techStack: t('bmad2.step3.techStack') || 'Tech Stack',
-      tradeoffs: t('bmad2.step3.tradeoffs') || 'Tradeoffs',
-      milestones: t('bmad2.step3.milestones') || 'Milestones',
-      validation: t('bmad2.step3.validation') || 'Validation',
-      kpis: t('bmad2.step3.kpis') || 'KPIs'
+      objective: t('bmad2.step3.objective'),
+      problem: t('bmad2.step3.problem'),
+      scope: t('bmad2.step3.scope'),
+      actors: t('bmad2.step3.actors'),
+      resources: t('bmad2.step3.resources'),
+      risks: t('bmad2.step3.risks'),
+      structure: t('bmad2.step3.structure'),
+      techStack: t('bmad2.step3.techStack'),
+      tradeoffs: t('bmad2.step3.tradeoffs'),
+      milestones: t('bmad2.step3.milestones'),
+      validation: t('bmad2.step3.validation'),
+      kpis: t('bmad2.step3.kpis')
     };
 
     const isDraftEmpty = !currentValue || !currentValue.trim();
@@ -592,28 +675,28 @@ ${pl('category')}: ${projectCategory}
 - ${t('bmad2.step3.objective')}: ${bmadData.brief.objective}
 - ${t('bmad2.step3.problem')}: ${bmadData.brief.problem}
 - ${t('bmad2.step3.scope')}: ${bmadData.brief.scope}
-- ${pl('notesFor', { phase: t('bmad2.step3.briefTab') })}: ${bmadData.brief.notes}
+- ${pl('notesFor', { phase: t('steps.brief.title') })}: ${bmadData.brief.notes}
 
 ## ${pl('reviewMappingHeader')}
 - ${t('bmad2.step3.actors')}: ${bmadData.mapping.actors}
 - ${t('bmad2.step3.resources')}: ${bmadData.mapping.resources}
 - ${t('bmad2.step3.risks')}: ${bmadData.mapping.risks}
-- ${pl('notesFor', { phase: t('bmad2.step3.mappingTab') })}: ${bmadData.mapping.notes}
+- ${pl('notesFor', { phase: t('steps.mapping.title') })}: ${bmadData.mapping.notes}
 
 ## ${pl('reviewArchHeader')}
 - ${pl('reviewGlobalStructure')}: ${bmadData.architecture.structure}
 - ${pl('reviewTechStack')}: ${bmadData.architecture.techStack}
 - ${t('bmad2.step3.tradeoffs')}: ${bmadData.architecture.tradeoffs}
-- ${pl('notesFor', { phase: t('bmad2.step3.architectureTab') })}: ${bmadData.architecture.notes}
+- ${pl('notesFor', { phase: t('steps.architecture.title') })}: ${bmadData.architecture.notes}
 
 ## ${pl('reviewDeliveryHeader')}
 - ${pl('reviewMilestonesPlanning')}: ${bmadData.delivery.milestones}
 - ${pl('reviewValidationCriteria')}: ${bmadData.delivery.validation}
 - ${t('bmad2.step3.kpis')}: ${bmadData.delivery.kpis}
-- ${pl('notesFor', { phase: t('bmad2.step3.deliveryTab') })}: ${bmadData.delivery.notes}
+- ${pl('notesFor', { phase: t('steps.delivery.title') })}: ${bmadData.delivery.notes}
       `;
 
-      const systemPrompt = t('ai.reviewerSystemPrompt', { language: t('doc.aiLanguage') || 'français' });
+      const systemPrompt = t('ai.reviewerSystemPrompt', { language: t('doc.aiLanguage') });
 
       const response = await sdk.inferModel({
         prompt: t('ai.reviewerPromptInput', { compiled }),
@@ -781,7 +864,7 @@ ${pl('category')}: ${projectCategory}
         resonanceParent,
         updatedAt: new Date().toISOString(),
         bmad: {
-          version: '0.900.0',
+          version: '1.0.0',
           userMode,
           telemetryMode: telemetry,
           proactiveMode,
@@ -823,19 +906,19 @@ ${pl('category')}: ${projectCategory}
     if (!projectName.trim()) return;
 
     setIsGenerating(true);
-    setGenerationProgress({ current: 0, total: 4, message: t('bmad2.step4.creating') || 'Génération...' });
+    setGenerationProgress({ current: 0, total: 4, message: t('bmad2.step4.creating') });
 
     try {
       const draftSaved = await handleSaveDraft(true);
-      if (!draftSaved) throw new Error(t('bmad2.errors.saveConfigFailed') || 'Impossible de sauvegarder la configuration.');
+      if (!draftSaved) throw new Error(t('bmad2.errors.saveConfigFailed'));
 
       const targetDir = (customExportPath || `${vaultRoot}/BMAD/${projectName.trim().replace(/[^a-zA-Z0-9-_]/g, '_')}`).replace(/\\/g, '/');
       const mkdirRes = await sdk.invoke('dialog.mkdir', { dirPath: targetDir });
       if (!mkdirRes || mkdirRes.success === false) {
-        throw new Error(mkdirRes?.error || t('bmad2.errors.mkdirFailed') || `Impossible de créer le dossier.`);
+        throw new Error(mkdirRes?.error || t('bmad2.errors.mkdirFailed'));
       }
 
-      const timestamp = new Date().toLocaleDateString(i18n?.language || 'fr', { year: 'numeric', month: 'long', day: 'numeric' });
+      const timestamp = new Date().toLocaleDateString(i18n?.language || 'en', { year: 'numeric', month: 'long', day: 'numeric' });
       const docs = compileMarkdownDocuments(projectName, projectVersion, bmadData, hashtags, timestamp, t);
 
       for (let i = 0; i < docs.length; i++) {
@@ -846,8 +929,10 @@ ${pl('category')}: ${projectCategory}
           message: t('bmad2.status.generatingDoc', { file: doc.filename })
         });
 
-        const systemPrompt = t('ai.compilerSystemPrompt', { language: t('doc.aiLanguage') || 'français' });
-        const prompt = t('ai.compilerPromptInput', { title: doc.title, rawContent: doc.content });
+        // ai.writer* are the pack keys (the old 'ai.compiler*' names never existed,
+        // so the model literally received the raw key strings as its prompts).
+        const systemPrompt = t('ai.writerSystemPrompt', { language: t('doc.aiLanguage') });
+        const prompt = t('ai.writerPrompt', { content: doc.content });
 
         const response = await sdk.inferModel({
           prompt,
@@ -875,10 +960,10 @@ ${pl('category')}: ${projectCategory}
         }
       }
 
-      showToast(t('bmad2.success.projectGenerated'), 'success');
+      showToast(t('bmad2.success.docsGeneratedSuccess'), 'success');
       setCompletedPath(targetDir);
     } catch (e: any) {
-      showToast(t('bmad2.errors.generationFailed', { error: e.message || e }), 'error');
+      showToast(t('bmad2.errors.exportFailed', { error: e.message || e }), 'error');
     } finally {
       setIsGenerating(false);
       setGenerationProgress(null);
@@ -948,7 +1033,7 @@ ${pl('category')}: ${projectCategory}
   const saveVisualFile = async (type: 'diagram' | 'slides') => {
     try {
       const targetDir = customExportPath || `${vaultRoot}/BMAD/${projectName.trim().replace(/[^a-zA-Z0-9-_]/g, '_')}`;
-      await sdk.invoke('dialog.mkdir', { path: targetDir });
+      await sdk.invoke('dialog.mkdir', { dirPath: targetDir });
 
       const filename = type === 'diagram' ? 'architecture.svg' : 'presentation.html';
       const content = type === 'diagram' ? generatedSvg : generatedHtml;
@@ -972,9 +1057,16 @@ ${pl('category')}: ${projectCategory}
   const handleOpenInExplorer = async () => {
     if (!completedPath) return;
     try {
-      await sdk.invoke('dialog.openPath', { path: completedPath });
+      // 'dialog.openPath' never existed in the host action registry. openInOS
+      // reveals a FILE in the OS explorer (showItemInFolder) and refuses
+      // extension-less paths, so target the first generated document.
+      const res = await sdk.openInOS(`${completedPath}/01_Brief.md`);
+      if (!res || res.success === false) {
+        throw new Error(res?.error || 'openInOS failed');
+      }
     } catch (e) {
-      showToast("Impossible d'ouvrir le dossier : " + e, 'error');
+      console.error('[BMAD] open in explorer failed:', e);
+      showToast(t('bmad2.errors.openFolderFailed'), 'error');
     }
   };
 
@@ -1050,7 +1142,7 @@ ${pl('category')}: ${projectCategory}
                   borderRadius: '6px',
                   lineHeight: 1
                 }}>
-                  v0.900
+                  v1.0.0
                 </span>
               </div>
               <p style={{ margin: '2px 0 0 0', fontSize: '11px', color: 'var(--text-muted)' }}>

@@ -3,7 +3,7 @@ import { BmadData } from '../types/bmad.types';
 /**
  * System prompt instructing the LLM to design an interactive HTML slides presentation.
  */
-export const SLIDES_SYSTEM_PROMPT = `Tu es un présentateur d'élite et un développeur web frontend chevronné. Tu conçois des présentations interactives autonomes sous forme d'une page HTML complète (CSS et Javascript inclus). Réponds UNIQUEMENT par le code HTML brut enveloppé dans un bloc \`\`\`html. Pas de blabla.`;
+export const SLIDES_SYSTEM_PROMPT = `You are an elite presenter and a seasoned frontend web developer. You design self-contained interactive slide presentations as a single complete HTML page (CSS and JavaScript included). Reply ONLY with the raw HTML code wrapped in a \`\`\`html block. No commentary.`;
 
 /**
  * Builds the visual prompt instructing the LLM to output the complete HTML slides file.
@@ -12,6 +12,7 @@ export const SLIDES_SYSTEM_PROMPT = `Tu es un présentateur d'élite et un déve
  * @param description - Project description text.
  * @param projectCategory - Active project category keyword.
  * @param bmadData - The complete BMAD framework steps data.
+ * @param language - Human language for every visible string in the deck.
  * @returns The formatted prompt text.
  */
 export const getHtmlSlidesPrompt = (
@@ -21,42 +22,42 @@ export const getHtmlSlidesPrompt = (
   bmadData: BmadData,
   language: string = 'English'
 ): string => {
-  return `[OUTPUT LANGUAGE] Write ALL visible text in ${language} — slide titles, body text, bullet points, and the navigation button labels (translate "Précédent"/"Suivant"/"Slide" into ${language}).
+  return `[OUTPUT LANGUAGE] Write ALL visible text in ${language} — slide titles, body text, bullet points, and the navigation button labels (translate "Previous"/"Next"/"Slide" into ${language}).
 
-Crée une présentation de diapositives interactive (HTML/CSS/JS) décrivant les fondations et le cadrage du projet BMAD suivant :
-Nom du projet: ${projectName}
+Create an interactive slide presentation (HTML/CSS/JS) describing the foundations and scoping of the following BMAD project:
+Project name: ${projectName}
 Description: ${description}
-Catégorie: ${projectCategory}
+Category: ${projectCategory}
 
 [BMAD DETAILS]
-- Objectif: ${bmadData.brief.objective || ''}
-- Problème: ${bmadData.brief.problem || ''}
-- Périmètre: ${bmadData.brief.scope || ''}
-- Acteurs: ${bmadData.mapping.actors || ''}
-- Ressources: ${bmadData.mapping.resources || ''}
-- Risques: ${bmadData.mapping.risks || ''}
+- Objective: ${bmadData.brief.objective || ''}
+- Problem: ${bmadData.brief.problem || ''}
+- Scope: ${bmadData.brief.scope || ''}
+- Actors: ${bmadData.mapping.actors || ''}
+- Resources: ${bmadData.mapping.resources || ''}
+- Risks: ${bmadData.mapping.risks || ''}
 - Structure: ${bmadData.architecture.structure || ''}
-- Stack Technique: ${bmadData.architecture.techStack || ''}
-- Arbitrages: ${bmadData.architecture.tradeoffs || ''}
-- Jalons: ${bmadData.delivery.milestones || ''}
+- Tech stack: ${bmadData.architecture.techStack || ''}
+- Trade-offs: ${bmadData.architecture.tradeoffs || ''}
+- Milestones: ${bmadData.delivery.milestones || ''}
 - Validation: ${bmadData.delivery.validation || ''}
 - KPIs: ${bmadData.delivery.kpis || ''}
 
-[CONSIGNES DE DESIGN ET STRUCTURE SLIDES]
-1. La présentation doit comporter exactement 6 diapositives structurées ainsi :
-   - Diapo 1: Titre, Description, Catégorie du projet
-   - Diapo 2: Problème & Objectif Principal
-   - Diapo 3: Mapping (Acteurs et Ressources clés)
-   - Diapo 4: Choix d'Architecture (Structure globale et Stack technique)
-   - Diapo 5: Delivery (Jalons et Critères de validation)
-   - Diapo 6: Indicateurs de succès (KPIs)
+[DESIGN AND SLIDE STRUCTURE RULES]
+1. The presentation must contain exactly 6 slides structured as follows:
+   - Slide 1: Title, Description, Project category
+   - Slide 2: Problem & Main objective
+   - Slide 3: Mapping (key Actors and Resources)
+   - Slide 4: Architecture choices (global Structure and Tech stack)
+   - Slide 5: Delivery (Milestones and Validation criteria)
+   - Slide 6: Success indicators (KPIs)
 
-2. **Structure et Script Obligatoires (Squelette à respecter scrupuleusement)** :
+2. **Mandatory structure and script (skeleton to follow scrupulously)**:
    <!DOCTYPE html>
    <html>
    <head>
      <meta charset="utf-8">
-     <title>Présentation BMAD - ${projectName}</title>
+     <title>BMAD Presentation - ${projectName}</title>
      <style>
        body {
          background: radial-gradient(circle at center, #16122c 0%, #0c0a18 100%);
@@ -143,22 +144,22 @@ Catégorie: ${projectCategory}
    <body>
      <div class="slides-wrapper">
        <section class="slide active">
-          <!-- Contenu Diapo 1 -->
+          <!-- Slide 1 content -->
        </section>
        <section class="slide">
-          <!-- Contenu Diapo 2 -->
+          <!-- Slide 2 content -->
        </section>
-       <!-- ... Diapo 3, 4, 5, 6 ... -->
+       <!-- ... Slides 3, 4, 5, 6 ... -->
      </div>
-     
+
      <div class="controls">
-       <button class="btn" id="prev-btn">← Précédent</button>
+       <button class="btn" id="prev-btn">← Previous</button>
        <span id="slide-num" style="font-weight: bold; font-family: monospace;">Slide 1 / 6</span>
-       <button class="btn" id="next-btn">Suivant →</button>
+       <button class="btn" id="next-btn">Next →</button>
      </div>
 
      <script>
-       // Logique de navigation - Attachement des écouteurs programmatiques (impératif)
+       // Navigation logic — attach listeners programmatically (mandatory)
        let currentIdx = 0;
        const slides = document.querySelectorAll('.slide');
        const slideNum = document.getElementById('slide-num');
@@ -186,7 +187,7 @@ Catégorie: ${projectCategory}
        document.getElementById('prev-btn').addEventListener('click', prevSlide);
        document.getElementById('next-btn').addEventListener('click', nextSlide);
 
-       // Afficher la première diapo
+       // Show the first slide
        showSlide(0);
 
        document.addEventListener('keydown', (e) => {
@@ -197,5 +198,5 @@ Catégorie: ${projectCategory}
    </body>
    </html>
 
-3. Remplis proprement les contenus avec des textes condensés et percutants reprenant les détails BMAD ci-dessus.`;
+3. Fill the slide contents cleanly with condensed, punchy text drawn from the BMAD details above.`;
 };

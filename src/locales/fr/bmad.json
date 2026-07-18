@@ -180,7 +180,9 @@
     "aiLanguage": "français",
     "aiLanguagePrompt": "Langue: français.",
     "aiRespondIn": "Réponds en français",
-    "empty": "(vide)"
+    "empty": "(vide)",
+    "version": "Version",
+    "untitledProject": "Projet_Sans_Nom"
   },
   "errors": {
     "title": "Erreur BMAD",
@@ -410,7 +412,8 @@
       "resonanceCreated": "Projet \"{{name}}\" créé.",
       "resonanceCreatedTitle": "Projet de résonance créé",
       "createError": "Impossible de créer le projet.",
-      "createErrorTitle": "Erreur"
+      "createErrorTitle": "Erreur",
+      "projectVersion": "Version"
     },
     "step2": {
       "title": "Configuration IA & Comportement",
@@ -609,7 +612,8 @@
       "selectAll": "Tout sélectionner",
       "deselectAll": "Désélectionner tout",
       "applyCorrections": "Appliquer les corrections sélectionnées et retour aux champs (Étape 3)",
-      "exportFolderTarget": "Dossier d'exportation cible"
+      "exportFolderTarget": "Dossier d'exportation cible",
+      "critique": "Critique"
     },
     "confirm": {
       "deleteProject": "Supprimer définitivement le projet BMAD \"{{project}}\" ?"
@@ -690,6 +694,10 @@
           "kpis": "Chiffre d'affaires, CAC (coût d'acquisition), LTV (lifetime value) ?"
         }
       }
+    },
+    "tile": {
+      "projects": "Projets",
+      "ideas": "Idées"
     }
   }
 }

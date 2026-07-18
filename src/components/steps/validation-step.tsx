@@ -144,7 +144,7 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
             {isReviewLoading ? (
               <>
                 <BrainLoader size={16} color="var(--accent-purple)" />
-                <span>{t('bmad2.status.criticalReview') || 'Revue Critique...'}</span>
+                <span>{t('bmad2.status.criticalReview')}</span>
               </>
             ) : (
               <>
@@ -158,7 +158,7 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
             <button 
               onClick={() => {
                 navigator.clipboard.writeText(reviewOutput);
-                showToast(t('success.reviewCopied') || "Revue copiée !", "success");
+                showToast(t('bmad2.success.reviewCopied'), 'success');
               }}
               className="tech-button"
             >
@@ -252,7 +252,7 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
                         </span>
                       </div>
                       <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: 0, fontStyle: 'italic', lineHeight: '1.4' }}>
-                        <strong>{t('bmad2.step4.critique', { defaultValue: 'Critique' })} :</strong> {sug.critique}
+                        <strong>{t('bmad2.step4.critique')} :</strong> {sug.critique}
                       </p>
                       <div style={{ 
                         marginTop: '6px', 
@@ -558,10 +558,10 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
       {/* Preview of Compiled Drafts */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '10px' }}>
         {[
-          { title: t('bmad2.step3.briefTab') || '📝 01_Brief', data: bmadData.brief, fields: ['objective', 'problem', 'scope'] as const },
-          { title: t('bmad2.step3.mappingTab') || '👥 02_Mapping', data: bmadData.mapping, fields: ['actors', 'resources', 'risks'] as const },
-          { title: t('bmad2.step3.architectureTab') || '🏗️ 03_Architecture', data: bmadData.architecture, fields: ['structure', 'techStack', 'tradeoffs'] as const },
-          { title: t('bmad2.step3.deliveryTab') || '📅 04_Delivery', data: bmadData.delivery, fields: ['milestones', 'validation', 'kpis'] as const }
+          { title: `📝 01. ${t('steps.brief.title')}`, data: bmadData.brief, fields: ['objective', 'problem', 'scope'] as const },
+          { title: `👥 02. ${t('steps.mapping.title')}`, data: bmadData.mapping, fields: ['actors', 'resources', 'risks'] as const },
+          { title: `🏗️ 03. ${t('steps.architecture.title')}`, data: bmadData.architecture, fields: ['structure', 'techStack', 'tradeoffs'] as const },
+          { title: `📅 04. ${t('steps.delivery.title')}`, data: bmadData.delivery, fields: ['milestones', 'validation', 'kpis'] as const }
         ].map(preview => (
           <div key={preview.title} className="glass-card" style={{ padding: '16px' }}>
             <div style={{ fontSize: '13px', fontWeight: 700, borderBottom: '1px solid var(--border-glass)', paddingBottom: '6px', marginBottom: '10px' }}>
@@ -570,13 +570,13 @@ export const ValidationStep: React.FC<ValidationStepProps> = ({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
               {preview.fields.map(f => (
                 <div key={f}>
-                  <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>{t(`bmad2.step3.${f}`) || f} : </span>
-                  <span style={{ color: 'var(--text-primary)' }}>{preview.data[f] || t('bmad2.doc.empty', { defaultValue: '(vide)' })}</span>
+                  <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>{t(`bmad2.step3.${f}`)} : </span>
+                  <span style={{ color: 'var(--text-primary)' }}>{preview.data[f] || `(${t('doc.empty')})`}</span>
                 </div>
               ))}
               <div>
-                <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>Notes : </span>
-                <span style={{ color: 'var(--text-primary)', fontStyle: 'italic' }}>{preview.data.notes || t('bmad2.doc.empty', { defaultValue: '(vide)' })}</span>
+                <span style={{ fontWeight: 600, color: 'var(--text-muted)' }}>{t('doc.notes')} : </span>
+                <span style={{ color: 'var(--text-primary)', fontStyle: 'italic' }}>{preview.data.notes || `(${t('doc.empty')})`}</span>
               </div>
             </div>
           </div>

@@ -56,10 +56,10 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
         padding: '0 8px'
       }}>
         {[
-          { id: 'brief', name: `01. ${t('steps.brief.title') || 'Brief'}` },
-          { id: 'mapping', name: `02. ${t('steps.mapping.title') || 'Mapping'}` },
-          { id: 'architecture', name: `03. ${t('steps.architecture.title') || 'Architecture'}` },
-          { id: 'delivery', name: `04. ${t('steps.delivery.title') || 'Delivery'}` }
+          { id: 'brief', name: `01. ${t('steps.brief.title')}` },
+          { id: 'mapping', name: `02. ${t('steps.mapping.title')}` },
+          { id: 'architecture', name: `03. ${t('steps.architecture.title')}` },
+          { id: 'delivery', name: `04. ${t('steps.delivery.title')}` }
         ].map(tInfo => (
           <button
             key={tInfo.id}
@@ -78,7 +78,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
         {activeBmadTab === 'brief' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <AssistedTextarea
-              label={t('bmad2.step3.objective') || 'Objectif principal'}
+              label={t('bmad2.step3.objective')}
               value={bmadData.brief.objective || ''}
               placeholder={getGuidedPlaceholder('brief', 'objective')}
               isAssisting={!!assistingFields.objective}
@@ -87,7 +87,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.problem') || 'Problème à résoudre'}
+              label={t('bmad2.step3.problem')}
               value={bmadData.brief.problem || ''}
               placeholder={getGuidedPlaceholder('brief', 'problem')}
               isAssisting={!!assistingFields.problem}
@@ -96,7 +96,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.scope') || 'Périmètre initial (MVP)'}
+              label={t('bmad2.step3.scope')}
               value={bmadData.brief.scope || ''}
               placeholder={getGuidedPlaceholder('brief', 'scope')}
               isAssisting={!!assistingFields.scope}
@@ -110,7 +110,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
         {activeBmadTab === 'mapping' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <AssistedTextarea
-              label={t('bmad2.step3.actors') || 'Acteurs clés & Services tiers'}
+              label={t('bmad2.step3.actors')}
               value={bmadData.mapping.actors || ''}
               placeholder={getGuidedPlaceholder('mapping', 'actors')}
               isAssisting={!!assistingFields.actors}
@@ -119,7 +119,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.resources') || 'Ressources disponibles & Allocation'}
+              label={t('bmad2.step3.resources')}
               value={bmadData.mapping.resources || ''}
               placeholder={getGuidedPlaceholder('mapping', 'resources')}
               isAssisting={!!assistingFields.resources}
@@ -128,7 +128,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.risks') || 'Risques & Dépendances critiques'}
+              label={t('bmad2.step3.risks')}
               value={bmadData.mapping.risks || ''}
               placeholder={getGuidedPlaceholder('mapping', 'risks')}
               isAssisting={!!assistingFields.risks}
@@ -142,7 +142,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
         {activeBmadTab === 'architecture' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <AssistedTextarea
-              label={t('bmad2.step3.structure') || 'Structure Globale'}
+              label={t('bmad2.step3.structure')}
               value={bmadData.architecture.structure || ''}
               placeholder={getGuidedPlaceholder('architecture', 'structure')}
               isAssisting={!!assistingFields.structure}
@@ -151,7 +151,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.techStack') || 'Stack Technique'}
+              label={t('bmad2.step3.techStack')}
               value={bmadData.architecture.techStack || ''}
               placeholder={getGuidedPlaceholder('architecture', 'techStack')}
               isAssisting={!!assistingFields.techStack}
@@ -160,7 +160,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.tradeoffs') || 'Arbitrages & Compromis'}
+              label={t('bmad2.step3.tradeoffs')}
               value={bmadData.architecture.tradeoffs || ''}
               placeholder={getGuidedPlaceholder('architecture', 'tradeoffs')}
               isAssisting={!!assistingFields.tradeoffs}
@@ -174,7 +174,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
         {activeBmadTab === 'delivery' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <AssistedTextarea
-              label={t('bmad2.step3.milestones') || 'Jalons & Planning'}
+              label={t('bmad2.step3.milestones')}
               value={bmadData.delivery.milestones || ''}
               placeholder={getGuidedPlaceholder('delivery', 'milestones')}
               isAssisting={!!assistingFields.milestones}
@@ -183,7 +183,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.validation') || 'Critères de validation (Definition of Done)'}
+              label={t('bmad2.step3.validation')}
               value={bmadData.delivery.validation || ''}
               placeholder={getGuidedPlaceholder('delivery', 'validation')}
               isAssisting={!!assistingFields.validation}
@@ -192,7 +192,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
             />
 
             <AssistedTextarea
-              label={t('bmad2.step3.kpis') || 'Indicateurs de succès (KPIs)'}
+              label={t('bmad2.step3.kpis')}
               value={bmadData.delivery.kpis || ''}
               placeholder={getGuidedPlaceholder('delivery', 'kpis')}
               isAssisting={!!assistingFields.kpis}
@@ -234,7 +234,7 @@ export const FlowWizardStep: React.FC<FlowWizardStepProps> = ({
           <div style={{ display: 'flex', gap: '12px' }}>
             <button onClick={() => setCurrentStep(2)} className="tech-button">{t('bmad2.actions.back')}</button>
             <button onClick={() => setCurrentStep(4)} className="tech-button primary">
-              {t('bmad2.actions.continueToStep4') || 'Continuer vers Étape 4'} <ArrowRight className="w-4 h-4" />
+              {t('bmad2.actions.continueToStep4')} <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>

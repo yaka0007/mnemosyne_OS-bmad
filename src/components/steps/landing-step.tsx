@@ -58,10 +58,10 @@ export const LandingStep: React.FC<LandingStepProps> = ({
       </div>
 
       <h2 style={{ fontSize: '24px', fontWeight: 800, margin: '0 0 8px 0' }}>
-        {t('bmad2.landing.welcome') || 'Bienvenue dans BMAD 2.0'}
+        {t('bmad2.landing.welcome')}
       </h2>
       <p style={{ color: 'var(--text-muted)', fontSize: '13.5px', margin: '0 0 24px 0', lineHeight: '1.6' }}>
-        {t('bmad2.landing.subtitle') || 'Le copilote intelligent pour structurer, mapper et délivrer vos projets avec précision.'}
+        {t('bmad2.landing.subtitle')}
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>

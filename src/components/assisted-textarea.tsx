@@ -47,11 +47,11 @@ export const AssistedTextarea: React.FC<AssistedTextareaProps> = ({
         >
           {isAssisting ? (
             <>
-              <BrainLoader size={14} /> {t('bmad2.status.writing') || 'Rédaction...'}
+              <BrainLoader size={14} /> {t('bmad2.status.writing')}
             </>
           ) : (
             <>
-              <Sparkles className="w-3 h-3" /> {t('bmad2.actions.assist') || 'Assister'}
+              <Sparkles className="w-3 h-3" /> {t('bmad2.step3.assist')}
             </>
           )}
         </button>
@@ -95,7 +95,7 @@ export const AssistedTextarea: React.FC<AssistedTextareaProps> = ({
           }}>
             <BrainLoader size={20} />
             <span style={{ letterSpacing: '0.05em', fontWeight: 500 }}>
-              {t('bmad2.status.studyNotVerified') || 'BMAD (En étude - Non vérifié)...'}
+              {t('bmad2.status.studyNotVerified')}
             </span>
           </div>
         )}

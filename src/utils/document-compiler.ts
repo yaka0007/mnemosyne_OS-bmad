@@ -24,98 +24,98 @@ export const compileMarkdownDocuments = (
   return [
     {
       filename: '01_Brief.md',
-      title: t('steps.brief.title') || 'Brief',
+      title: t('steps.brief.title'),
       content: `
-# ${t('steps.brief.title') || 'Brief'} : ${projectName}
-*${t('doc.version') || 'Version'} : ${projectVersion}*
-*${t('doc.generatedAt') || 'Généré le'} : ${timestamp}*
-*${t('doc.tags') || 'Tags'} : ${tagLine}*
+# ${t('steps.brief.title')} : ${projectName}
+*${t('doc.version')} : ${projectVersion}*
+*${t('doc.generatedAt')} : ${timestamp}*
+*${t('doc.tags')} : ${tagLine}*
 
 ---
 
-## 🎯 ${t('bmad2.step3.objective') || 'Objectif principal'}
-${bmadData.brief.objective || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 🎯 ${t('bmad2.step3.objective')}
+${bmadData.brief.objective || `*(${t('doc.toComplete')})*`}
 
-## ⚠️ ${t('bmad2.step3.problem') || 'Problème à résoudre'}
-${bmadData.brief.problem || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## ⚠️ ${t('bmad2.step3.problem')}
+${bmadData.brief.problem || `*(${t('doc.toComplete')})*`}
 
-## 🧭 ${t('bmad2.step3.scope') || 'Périmètre initial (MVP)'}
-${bmadData.brief.scope || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 🧭 ${t('bmad2.step3.scope')}
+${bmadData.brief.scope || `*(${t('doc.toComplete')})*`}
 
-## 📝 ${t('doc.notes') || 'Notes & Contexte'}
-${bmadData.brief.notes || `*(${t('doc.empty') || 'Vide'})*`}
+## 📝 ${t('doc.notes')}
+${bmadData.brief.notes || `*(${t('doc.empty')})*`}
       `.trim()
     },
     {
       filename: '02_Mapping.md',
-      title: t('steps.mapping.title') || 'Mapping',
+      title: t('steps.mapping.title'),
       content: `
-# ${t('steps.mapping.title') || 'Mapping'} : ${projectName}
-*${t('doc.version') || 'Version'} : ${projectVersion}*
-*${t('doc.generatedAt') || 'Généré le'} : ${timestamp}*
-*${t('doc.tags') || 'Tags'} : ${tagLine}*
+# ${t('steps.mapping.title')} : ${projectName}
+*${t('doc.version')} : ${projectVersion}*
+*${t('doc.generatedAt')} : ${timestamp}*
+*${t('doc.tags')} : ${tagLine}*
 
 ---
 
-## 👥 ${t('bmad2.step3.actors') || 'Acteurs clés & Services tiers'}
-${bmadData.mapping.actors || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 👥 ${t('bmad2.step3.actors')}
+${bmadData.mapping.actors || `*(${t('doc.toComplete')})*`}
 
-## ⚙️ ${t('bmad2.step3.resources') || 'Ressources disponibles & Allocation'}
-${bmadData.mapping.resources || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## ⚙️ ${t('bmad2.step3.resources')}
+${bmadData.mapping.resources || `*(${t('doc.toComplete')})*`}
 
-## 💣 ${t('bmad2.step3.risks') || 'Risques & Dépendances critiques'}
-${bmadData.mapping.risks || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 💣 ${t('bmad2.step3.risks')}
+${bmadData.mapping.risks || `*(${t('doc.toComplete')})*`}
 
-## 📝 ${t('doc.notes') || 'Notes de Mapping'}
-${bmadData.mapping.notes || `*(${t('doc.empty') || 'Vide'})*`}
+## 📝 ${t('doc.notes')}
+${bmadData.mapping.notes || `*(${t('doc.empty')})*`}
       `.trim()
     },
     {
       filename: '03_Architecture.md',
-      title: t('steps.architecture.title') || 'Architecture',
+      title: t('steps.architecture.title'),
       content: `
-# ${t('steps.architecture.title') || 'Architecture'} : ${projectName}
-*${t('doc.version') || 'Version'} : ${projectVersion}*
-*${t('doc.generatedAt') || 'Généré le'} : ${timestamp}*
-*${t('doc.tags') || 'Tags'} : ${tagLine}*
+# ${t('steps.architecture.title')} : ${projectName}
+*${t('doc.version')} : ${projectVersion}*
+*${t('doc.generatedAt')} : ${timestamp}*
+*${t('doc.tags')} : ${tagLine}*
 
 ---
 
-## 🏗️ ${t('bmad2.step3.structure') || 'Structure Globale'}
-${bmadData.architecture.structure || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 🏗️ ${t('bmad2.step3.structure')}
+${bmadData.architecture.structure || `*(${t('doc.toComplete')})*`}
 
-## 💻 ${t('bmad2.step3.techStack') || 'Stack Technique'}
-${bmadData.architecture.techStack || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 💻 ${t('bmad2.step3.techStack')}
+${bmadData.architecture.techStack || `*(${t('doc.toComplete')})*`}
 
-## ⚖️ ${t('bmad2.step3.tradeoffs') || 'Arbitrages & Compromis'}
-${bmadData.architecture.tradeoffs || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## ⚖️ ${t('bmad2.step3.tradeoffs')}
+${bmadData.architecture.tradeoffs || `*(${t('doc.toComplete')})*`}
 
-## 📝 ${t('doc.notes') || 'Notes d\'Architecture'}
-${bmadData.architecture.notes || `*(${t('doc.empty') || 'Vide'})*`}
+## 📝 ${t('doc.notes')}
+${bmadData.architecture.notes || `*(${t('doc.empty')})*`}
       `.trim()
     },
     {
       filename: '04_Delivery.md',
-      title: t('steps.delivery.title') || 'Delivery',
+      title: t('steps.delivery.title'),
       content: `
-# ${t('steps.delivery.title') || 'Delivery'} : ${projectName}
-*${t('doc.version') || 'Version'} : ${projectVersion}*
-*${t('doc.generatedAt') || 'Généré le'} : ${timestamp}*
-*${t('doc.tags') || 'Tags'} : ${tagLine}*
+# ${t('steps.delivery.title')} : ${projectName}
+*${t('doc.version')} : ${projectVersion}*
+*${t('doc.generatedAt')} : ${timestamp}*
+*${t('doc.tags')} : ${tagLine}*
 
 ---
 
-## 📅 ${t('bmad2.step3.milestones') || 'Jalons & Planning'}
-${bmadData.delivery.milestones || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 📅 ${t('bmad2.step3.milestones')}
+${bmadData.delivery.milestones || `*(${t('doc.toComplete')})*`}
 
-## ✅ ${t('bmad2.step3.validation') || 'Critères de validation (Definition of Done)'}
-${bmadData.delivery.validation || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## ✅ ${t('bmad2.step3.validation')}
+${bmadData.delivery.validation || `*(${t('doc.toComplete')})*`}
 
-## 📈 ${t('bmad2.step3.kpis') || 'Indicateurs de succès (KPIs)'}
-${bmadData.delivery.kpis || `*(${t('doc.toComplete') || 'À compléter'})*`}
+## 📈 ${t('bmad2.step3.kpis')}
+${bmadData.delivery.kpis || `*(${t('doc.toComplete')})*`}
 
-## 📝 ${t('doc.notes') || 'Notes de Delivery'}
-${bmadData.delivery.notes || `*(${t('doc.empty') || 'Vide'})*`}
+## 📝 ${t('doc.notes')}
+${bmadData.delivery.notes || `*(${t('doc.empty')})*`}
       `.trim()
     }
   ];

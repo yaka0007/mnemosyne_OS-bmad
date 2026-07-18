@@ -89,7 +89,7 @@ export const FoundationsStep: React.FC<FoundationsStepProps> = ({
           </div>
           <div>
             <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
-              {t('bmad2.step1.projectVersion') || 'Version'}
+              {t('bmad2.step1.projectVersion')}
             </label>
             <input
               type="text"
@@ -130,7 +130,7 @@ export const FoundationsStep: React.FC<FoundationsStepProps> = ({
                   style={{ padding: '8px', borderRadius: '8px', fontSize: '10px' }}
                 >
                   <Icon className="w-4 h-4 text-accent" />
-                  <span style={{ fontSize: '10px' }}>{t(`categories.${catKey}`) || catKey}</span>
+                  <span style={{ fontSize: '10px' }}>{t(`bmad2.categories.${catKey}`)}</span>
                 </div>
               );
             })}
